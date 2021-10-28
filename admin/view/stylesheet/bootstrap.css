@@ -4,6 +4,9 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+
+/* MARCADOR TESTE 1 */
+
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -202,8 +205,8 @@ td, th {
     border: 1px solid #ddd !important; } }
   @font-face {
     font-family: 'Glyphicons Halflings';
-    src: url("../javascript/bootstrap/fonts/glyphicons-halflings-regular.eot");
-    src: url("../javascript/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format('embedded-opentype'), url("../javascript/bootstrap/fonts/glyphicons-halflings-regular.woff2") format('woff2'), url("../javascript/bootstrap/fonts/glyphicons-halflings-regular.woff") format('woff'), url("../javascript/bootstrap/fonts/glyphicons-halflings-regular.ttf") format('truetype'), url("../javascript/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format('svg'); }
+    src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
+    src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format('embedded-opentype'), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format('woff2'), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format('woff'), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format('truetype'), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format('svg'); }
 
 .glyphicon {
   position: relative;
@@ -4713,7 +4716,7 @@ button.close {
     max-width: 100%;
     height: auto;
     line-height: 1; }
-  @media (transform-3d), (-webkit-transform-3d) {
+  @media all and (transform-3d), (-webkit-transform-3d) {
     .carousel-inner > .item {
       -webkit-transition: -webkit-transform 0.6s ease-in-out;
       -moz-transition: -moz-transform 0.6s ease-in-out;
@@ -4910,8 +4913,7 @@ button.close {
 .affix {
   position: fixed; }
   @-ms-viewport {
-  .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next {
-    width: device-width; } }
+    width: device-width; }
 
 .visible-xs {
   display: none !important; }
