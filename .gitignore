@@ -1,15 +1,19 @@
 /config.php
 
+/storage
+
+anotacoes
+
+
 api/config.php
 
 admin/config.php
 
 image/cache
 
-storage
 
 system/storage/logs
 
 system/storage/session
 
-cache
+system/storage/cache
