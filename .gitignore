@@ -6,8 +6,10 @@ admin/config.php
 
 image/cache
 
-storage/cache
+storage
 
 system/storage/logs
 
 system/storage/session
+
+cache
