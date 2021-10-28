@@ -1,0 +1,1151 @@
+<!--
+    Copyright 2013-2021 Codemarket - Todos os direitos reservados.
+    Atualizado 20/10/2021
+!-->
+<modification>
+    <name><![CDATA[<font color="#00a99d"><b>Codemarket - Melhor Envio Oficial 4.4</b></font>]]></name>
+    <code><![CDATA[Codemarket - Melhor Envio Oficial]]></code>
+    <version><![CDATA[4.4]]></version>
+    <author><![CDATA[<font color="#00a99d"><b>Codemarket - codemarket.com.br</b></font>]]></author>
+    <link>https://www.codemarket.com.br</link>
+
+    <file path="admin/controller/common/dashboard.php">
+        <operation>
+            <search><![CDATA[
+                $this->response->setOutput($this->load->view('common/dashboard', $data));
+            ]]></search>
+            <add position="before"><![CDATA[
+                $this->load->model('module/codemarket_module');
+                $conf524 = $this->model_module_codemarket_module->getModulo('524');
+
+                if(!empty($conf524) && !empty($conf524->status) && $conf524->status == 1) {
+
+                    if(!empty($conf524->apiToken)) {
+                        $tokenParts = explode('.', trim($conf524->apiToken));
+                        if(!empty($tokenParts[1])){
+                            $tokenPayload = json_decode(base64_decode($tokenParts[1]));
+                            $tokenExpirationDate = date('d/m/Y H:i:s', $tokenPayload->exp);
+
+                            $dateNow = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
+                            $dateNow = $dateNow->format('d/m/Y H:i:s');
+
+                            if(strtotime($dateNow) > $tokenPayload->exp){
+                                $tokenExpirationDate = $tokenExpirationDate." Expirado!";
+                            }
+                        }else{
+                            $tokenExpirationDate = 'Token inválido! Crie um novo Token no Melhor Envio';
+                        }
+                    }else{
+                        $tokenExpirationDate = 'Sem Token! Crie um novo Token no Melhor Envio';
+                    }
+
+                    $data['code524'] = $tokenExpirationDate;
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/common/dashboard.twig">
+        <operation>
+            <search index="1"><![CDATA[
+                <div class="container-fluid">
+            ]]></search>
+            <add position="before" trim="true"><![CDATA[
+                {% if code524 is not empty %}
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><i aria-hidden="true" class="fa fa fa-truck"></i> <a href="https://www.codemarket.com.br/produto/integracao-melhor-envio-oficial-correios-e-transportadoras" target="_blank">Melhor Envio Oficial Codemarket</a></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <b>O seu Token Expira em:</b> <span style="color: #328dc8;font-weight: bold;">{{ code524 }}</span> | Renove antes da data de expiração e salve no Painel da melhoria
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/setting/extension.php">
+        <operation>
+            <search><![CDATA[
+                public function uninstall($type, $code) {
+            ]]></search>
+            <add position="after"><![CDATA[
+                if($code == 'code_melhorenvio'){
+                    return false;
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/setting/event.php">
+        <operation>
+            <search><![CDATA[
+                public function uninstall($type, $code) {
+            ]]></search>
+            <add position="after"><![CDATA[
+                if($code == 'code_melhorenvio'){
+                    return false;
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/module/code_activemodule.php">
+        <operation>
+            <search><![CDATA[
+                //eventActiveModule
+            ]]></search>
+            <add position="after"><![CDATA[
+                $log524 = new Log('Code-MelhorEnvio-' . date('m-Y') . '.log');
+                $log524->write("eventActiveModule() - Melhor Envio");
+
+                $this->db->query('CREATE TABLE IF NOT EXISTS `' . DB_PREFIX . 'code_melhorenvio` (
+                  `oc_code_melhorenvio_id` int(11) NOT NULL AUTO_INCREMENT,
+                  `order_id` int(11) DEFAULT NULL,
+                  `packages` longtext DEFAULT NULL,
+                  `data` longtext DEFAULT NULL,
+                  `status` varchar(255) DEFAULT NULL,
+                  `date_created` datetime DEFAULT NULL,
+                  PRIMARY KEY (`oc_code_melhorenvio_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                ');
+
+                $query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "code_melhorenvio` LIKE 'packages'");
+                if (!$query->num_rows) {
+                    $this->db->query("ALTER TABLE `" . DB_PREFIX . "code_melhorenvio` ADD (`packages` longtext DEFAULT NULL)");
+                }
+
+                $query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "code_melhorenvio` LIKE 'status'");
+                if (!$query->num_rows) {
+                    $this->db->query("ALTER TABLE `" . DB_PREFIX . "code_melhorenvio` ADD (`status` varchar(255) DEFAULT NULL)");
+                }
+
+                $this->load->model('module/codemarket_module');
+                $c524 = $this->model_module_codemarket_module->getModulo('524');
+
+                $c524_status = (!empty($c524->status)) ? 1 : 0;
+
+                $this->model_module_codemarket_module->addExtensionStore('shipping', 'code_melhorenvio');
+                $this->model_module_codemarket_module->editSettingStore('shipping', 'code_melhorenvio', 'code_melhorenvio_status', $c524_status);
+
+                $log524->write("eventActiveModule() - Melhor Envio rodado com sucesso");
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- DESENVOLVIMENTO APENAS -->
+    <!--
+    <file path="admin/controller/common/dashboard.php">
+        <operation>
+            <search><![CDATA[
+                public function index() {
+            ]]></search>
+            <add position="after"><![CDATA[
+               $log524 = new Log('Code-MelhorEnvio-' . date('m-Y') . '.log');
+                $log524->write("eventActiveModule() - Melhor Envio");
+
+                $this->db->query('CREATE TABLE IF NOT EXISTS `' . DB_PREFIX . 'code_melhorenvio` (
+                  `oc_code_melhorenvio_id` int(11) NOT NULL AUTO_INCREMENT,
+                  `order_id` int(11) DEFAULT NULL,
+                  `packages` longtext DEFAULT NULL,
+                  `data` longtext DEFAULT NULL,
+                  `status` varchar(255) DEFAULT NULL,
+                  `date_created` datetime DEFAULT NULL,
+                  PRIMARY KEY (`oc_code_melhorenvio_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                ');
+
+                $query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "code_melhorenvio` LIKE 'packages'");
+                if (!$query->num_rows) {
+                    $this->db->query("ALTER TABLE `" . DB_PREFIX . "code_melhorenvio` ADD (`packages` longtext DEFAULT NULL)");
+                }
+
+                $query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "code_melhorenvio` LIKE 'status'");
+                if (!$query->num_rows) {
+                    $this->db->query("ALTER TABLE `" . DB_PREFIX . "code_melhorenvio` ADD (`status` varchar(255) DEFAULT NULL)");
+                }
+
+                $this->load->model('module/codemarket_module');
+                $c524 = $this->model_module_codemarket_module->getModulo('524');
+
+                $c524_status = (!empty($c524->status)) ? 1 : 0;
+
+                $this->model_module_codemarket_module->addExtensionStore('shipping', 'code_melhorenvio');
+                $this->model_module_codemarket_module->editSettingStore('shipping', 'code_melhorenvio', 'code_melhorenvio_status', $c524_status);
+
+                $log524->write("eventActiveModule() - Melhor Envio rodado com sucesso");
+            ]]></add>
+        </operation>
+    </file>
+    -->
+
+    <!-- Verifica o Status do Melhor Envio -->
+    <file path="catalog/controller/code/codeapi_info.php">
+        <operation>
+            <search><![CDATA[
+                public function index()
+            ]]></search>
+            <add position="before"><![CDATA[
+                // Verifica o Status do Melhor Envio - index.php?route=code/codeapi_info/verifyStatusMelhorEnvio&token=
+                public function verifyStatusMelhorEnvio(){
+                    $this->load->model('module/codemarket_module');
+                    $c524 = $this->model_module_codemarket_module->getModulo('524');
+
+                    if (empty($c524->code_token) || $c524->code_token != $this->request->get['token']) {
+                        exit("Informe um Token válido!");
+                    }
+
+                    $c524_status = (!empty($c524->status)) ? 1 : 0;
+
+                    $this->model_module_codemarket_module->addExtensionStore('shipping', 'code_melhorenvio');
+                    $this->model_module_codemarket_module->editSettingStore('shipping', 'code_melhorenvio', 'code_melhorenvio_status', $c524_status);
+                    echo "<h1>Verificado com sucesso o Status do Melhor Envio, Status: ".$c524_status ."</h1>";
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Salvando o Frete escolhido modo após pedido criado -->
+    <file path="catalog/model/checkout/order.php">
+        <operation>
+            <search><![CDATA[
+                return $order_id;
+            ]]></search>
+            <add position="before"><![CDATA[
+                $log = new Log('Code-MelhorEnvio-' . date('m-Y') . '.log');
+                $log->write("SalvarFrete - Passo 1 Pedido Criado");
+
+                $this->load->model('module/codemarket_module');
+                $c524 = $this->model_module_codemarket_module->getModulo('524');
+
+                if (!empty($this->session->data['melhor_envio']) && !empty($this->session->data['shipping_method']['code']) &&
+                    strpos($this->session->data['shipping_method']['code'],'code_melhorenvio') >= 0 &&
+                    !empty($this->session->data['melhor_envio']['post']) &&
+                    !empty($this->session->data['shipping_method']['melhorenvio_id']) &&
+                    !empty($c524) && !empty($c524->salvarFrete) && $c524->salvarFrete == 2
+                ) {
+                    $log->write("SalvarFrete - Passo 2 Passou na verificação ".$order_id);
+                    //$log->write("SalvarFrete - Shipping Method ".print_r($this->session->data['shipping_method'], true));
+
+                    $id =  (int) $this->session->data['shipping_method']['melhorenvio_id'];
+
+                    foreach((array) $this->session->data['melhor_envio']['post'] as $key_menvio => $code_menvio){
+                        $code_menvio = (array) $code_menvio;
+                        if(!empty($code_menvio['id']) && $id == $code_menvio['id']){
+                            $key = $key_menvio;
+                            break;
+                        }
+                    }
+
+                    if(!empty($key) && !empty($this->session->data['melhor_envio']['post'][$key]) && !empty($order_id)){
+                        $this->db->query('INSERT INTO ' . DB_PREFIX . 'code_melhorenvio
+                            SET
+                            order_id = ' . (int) $order_id . ',
+                            data = "' . $this->db->escape(json_encode($this->session->data['melhor_envio']['post'][$key])) . '",
+                            date_created = NOW()'
+                        );
+
+                        $log->write("SalvarFrete - Passo Final salvo Melhor Envio com sucesso ".$order_id);
+                    }else{
+                        $log->write("SalvarFrete - Passo Final não passou na condição ".$order_id);
+                    }
+
+                    //unset($this->session->data['melhor_envio']);
+                }else{
+                     $log->write("SalvarFrete - Passo 2 não passou na verificação ".$order_id);
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Salvando o Frete escolhido modo página de sucesso -->
+    <file path="catalog/controller/checkout/success.php">
+        <operation>
+            <search><![CDATA[
+                $this->cart->clear();
+            ]]></search>
+            <add position="after"><![CDATA[
+                $log = new Log('Code-MelhorEnvio-' . date('m-Y') . '.log');
+                $log->write("SalvarFrete - Passo 1 Pagina do Sucesso");
+
+                $this->load->model('module/codemarket_module');
+                $c524 = $this->model_module_codemarket_module->getModulo('524');
+
+                if (!empty($this->session->data['melhor_envio']) && !empty($this->session->data['shipping_method']['code']) &&
+                    strpos($this->session->data['shipping_method']['code'],'code_melhorenvio') >= 0 &&
+                    !empty($this->session->data['melhor_envio']['post']) &&
+                    !empty($this->session->data['shipping_method']['melhorenvio_id']) &&
+                    !empty($c524) && ((!empty($c524->salvarFrete) && $c524->salvarFrete == 1) || (empty($c524->salvarFrete)))
+                ) {
+                    $log->write("SalvarFrete - Passo 2 Passou na verificação");
+                    //$log->write("SalvarFrete - Shipping Method ".print_r($this->session->data['shipping_method'], true));
+
+                    $id =  (int) $this->session->data['shipping_method']['melhorenvio_id'];
+
+                    foreach((array) $this->session->data['melhor_envio']['post'] as $key_menvio => $code_menvio){
+                        $code_menvio = (array) $code_menvio;
+                        if(!empty($code_menvio['id']) && $id == $code_menvio['id']){
+                            $key = $key_menvio;
+                            break;
+                        }
+                    }
+
+                    if(!empty($key) && !empty($this->session->data['melhor_envio']['post'][$key]) && !empty($this->session->data['order_id'])){
+                        $this->db->query('INSERT INTO ' . DB_PREFIX . 'code_melhorenvio
+                            SET
+                            order_id = ' . (int) $this->session->data['order_id'] . ',
+                            data = "' . $this->db->escape(json_encode($this->session->data['melhor_envio']['post'][$key])) . '",
+                            date_created = NOW()
+                        ');
+
+                        $log->write("SalvarFrete - Passo Final salvo Melhor Envio com sucesso ".$this->session->data['order_id']);
+                    }else{
+                        $log->write("SalvarFrete - Passo Final não passou na condição");
+                    }
+
+                    unset($this->session->data['melhor_envio']);
+                }else{
+                     $log->write("SalvarFrete - Passo 2 não passou na verificação");
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ADICIONANDO NA ADMINISTRAÇÃO -->
+    <file path="admin/controller/sale/order.php">
+        <operation>
+            <search><![CDATA[
+                $this->response->setOutput($this->load->view('sale/order_info', $data));
+            ]]></search>
+            <add position="before"><![CDATA[
+                $query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'code_melhorenvio WHERE order_id = ' . (int) $order_id);
+
+                if ($query->row) {
+                    $data['menvio'] = json_decode($query->row['data']);
+                } else {
+                    $data['menvio'] = null;
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/sale/order_info.twig">
+        <operation>
+            <search trim="true" index="3"><![CDATA[
+                <div class="panel panel-default">
+            ]]></search>
+            <add position="before"><![CDATA[
+                {% if menvio is not empty %}
+                    {# melhor_envio_xml Inicio Melhor envio #}
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />                    <style type="text/css">
+                        .btn-remover-carrinho {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 100px;
+                            height: 100px;
+                            box-shadow: rgba(0, 0, 0, 0.247059) 0 0 50px -15px;
+                            border-radius: 4px;
+                            font-size: 40px;
+                        }
+
+                        .btn-adicionar-carrinho {
+                            box-shadow: rgba(0, 0, 0, 0.247059) 0 0 50px -15px;
+                            border-radius: 4px;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .btn-finalizar-carrinho {
+                            display: block;
+                            width: 100px;
+                            margin-top: 10px;
+                            margin-left: auto;
+                            margin-right: auto;
+                            margin-bottom: 0;
+                            text-transform: uppercase;
+                            font-size: 11px;
+                            font-weight: 600;
+                        }
+
+                        .info-block {
+                            display: block;
+                            background-color: rgba(105, 105, 105, 0.09);
+                            padding: 10px;
+                            border-radius: 8px;
+                            margin-bottom: 10px;
+                        }
+
+                        .info-block:last-child {
+                            margin-bottom: 0;
+                        }
+
+                        .box {
+                            width: 110px;
+                            height: 110px;
+                            -webkit-box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1);
+                            -moz-box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1);
+                            box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1);
+                            background-color: rgba(211, 211, 211, 0.2);
+                            padding: 10px 0;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-wrap: wrap;
+                            text-align: center;
+                        }
+
+                        .box i {
+                            font-size: 40px;
+                            width: 100%;
+                            text-align: center;
+                        }
+
+                        .box small {
+                            font-size: 10px;
+                        }
+
+                        .box-ctn {
+                            margin-right: 15px;
+                        }
+
+                        .box span.counter {
+                            background-color: red;
+                            color: #fff;
+                            border-radius: 50%;
+                            width: 20px;
+                            position: absolute;
+                            display: flex;
+                            height: 20px;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        #menvio legend {
+                            margin-bottom: 5px;
+                            margin-top: 20px;
+                            text-transform: uppercase;
+                            font-size: 14px;
+                            font-weight: 700;
+                        }
+
+                        #menvio label {
+                            font-weight: normal;
+                        }
+
+                        #menvio legend:first-child {
+                            margin-top: 0;
+                        }
+
+                        #menvio .product-item {
+                            display: inline-flex;
+                            padding: 5px 20px;
+                            padding-right: 5px;
+                            align-items: center;
+                            justify-content: space-between;
+                            margin-right: 15px;
+                            margin-bottom: 15px;
+                            -webkit-box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1);
+                            -moz-box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1);
+                            box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1);
+                            background-color: rgba(211, 211, 211, 0.2);
+                        }
+
+                        #menvio .product-remove {
+                            margin-left: 20px;
+                            cursor: pointer;
+                            color: red;
+                        }
+
+                        div.overlay-menvio {
+                            width: 100vw;
+                            height: 100vh;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            background-color: rgba(0, 0, 0, 0.7);
+                            z-index: 9999;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .swal2-popup {
+                            font-size: 14px !important;
+                        }
+
+                        .popover { min-width: 350px; max-width: 90vw; }
+
+                        .package-items{
+                            padding: 0; padding-left: 15px;
+                            margin-right: 30px;
+                        }
+                    </style>
+
+                    <div id="menvio">
+                        <div class="overlay-menvio animated fadeIn" v-if="loading">
+                            <svg width="200px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-ellipsis" style="background: none;"><!--circle(cx="16",cy="50",r="10")-->
+                                <circle cx="84" cy="50" r="0" fill="#dce4eb">
+                                    <animate attributeName="r" values="10;0;0;0;0" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"></animate>
+                                    <animate attributeName="cx" values="84;84;84;84;84" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"></animate>
+                                </circle>
+                                <circle cx="84" cy="50" r="0.116223" fill="#bbcedd">
+                                    <animate attributeName="r" values="0;10;10;10;0" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="-0.5s"></animate>
+                                    <animate attributeName="cx" values="16;16;50;84;84" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="-0.5s"></animate>
+                                </circle>
+                                <circle cx="83.6048" cy="50" r="10" fill="#85a2b6">
+                                    <animate attributeName="r" values="0;10;10;10;0" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="-0.25s"></animate>
+                                    <animate attributeName="cx" values="16;16;50;84;84" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="-0.25s"></animate>
+                                </circle>
+                                <circle cx="49.6048" cy="50" r="10" fill="#fdfdfd">
+                                    <animate attributeName="r" values="0;10;10;10;0" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"></animate>
+                                    <animate attributeName="cx" values="16;16;50;84;84" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"></animate>
+                                </circle>
+                                <circle cx="16" cy="50" r="9.88378" fill="#dce4eb">
+                                    <animate attributeName="r" values="0;0;10;10;10" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"></animate>
+                                    <animate attributeName="cx" values="16;16;16;50;84" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"></animate>
+                                </circle>
+                            </svg>
+                        </div>
+                        <div class="panel panel-default hidden" v-if="ready" :style="'display:' + (ready ? 'block !important':'none')  + ';visibility:' + (ready ? 'visible !important':'hidden !important') ">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <i class="fa fa fa-truck" aria-hidden="true"></i>
+                                    <a href='https://www.codemarket.com.br/produto/integracao-melhor-envio-oficial-correios-e-transportadoras' target='_blank'>Melhor Envio Oficial Codemarket</a>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row" style="display: flex; align-items: stretch;">
+                                    <div class="col-md-3" style="display: flex;">
+                                        <table class="table" style="margin-bottom: 0;">
+                                            <tr>
+                                                <td colspan="2" class="text-center" style="border-top: none;">
+                                                    <img :src="menvio.company.picture" style="display: inline-block; max-width: 50%; margin-bottom: 10px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 1%;">Serviço:</td>
+                                                <td>
+                                                    [[ menvio.company.name ]] [[ menvio.name ]]
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Prazo:</td>
+                                                <td>[[ menvio.delivery_time ]] dias úteis</td>
+                                            </tr>
+                                            <tr v-if="menvio.additional_services.receipt ||
+                                                    menvio.additional_services.own_hand ||
+                                                    menvio.additional_services.collect
+                                            ">
+                                                <td style="width: 40%;">Opcionais</td>
+                                                <td>[[ menvio.additional_services.receipt ? 'AR' : '' ]]
+                                                    [[ menvio.additional_services.own_hand ? ', MP' : '' ]]
+                                                    [[ menvio.additional_services.collect ? ', CL' : '' ]]
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <h4 style="font-weight: 600; margin-bottom: 15px;">PACOTES</h4>
+
+                                        <div v-if="canCart">
+                                            <template v-if="productList.length > 0">
+                                                <p>Ainda restam [[ productList.length ]] produtos para serem adicionados.</p>
+                                            </template>
+                                            <template v-else>
+                                                <p>Excelente, todos os produtos foram empacotados.</p>
+                                            </template>
+
+                                            <uiv-progress-bar v-model="productsProgress" label :type="productsProgress < 100 ? 'warning':'success'" striped/>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: flex-start;">
+                                            <div class="box-ctn animated flipInX" v-for="(package, index) in packages" :key="index">
+                                                <div class="box" :id="'box' + index" :style="package.isOnCart ? 'border: 1px solid rgb(24, 114, 162)':''">
+                                                     <img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MDQuMTI0IDUwNC4xMjQiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUwNC4xMjQgNTA0LjEyNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIHN0eWxlPSJmaWxsOiNFRkM3NUU7IiBkPSJNMCwxMjYuNjIyTDI1Mi4wNjIsMS4zNzhsMjUyLjA2MiwxMjUuMjQzdjE2LjU0MkwyNTIuMDYyLDI2OC40MDZMMCwxNDMuNTU4VjEyNi42MjJ6Ii8+CjxwYXRoIHN0eWxlPSJmaWxsOiNFN0JGNTU7IiBkPSJNMCwxMjYuNjIybDI1Mi4wNjIsMTI1LjI0M2wyNTIuMDYyLTEyNS4yNDN2MjUwLjg4bC0yNTIuODUsMTI1LjI0M0wwLDM3Ny41MDNWMTI2LjYyMnoiLz4KPHBhdGggc3R5bGU9ImZpbGw6I0RCQjU1MTsiIGQ9Ik0yNTIuMDYyLDUwMi4zNTJWMjUxLjg2NkwxLjU3NSwxMjcuNDA5SDB2MjUwLjA5MmwyNTEuMjc0LDEyNS4yNDNMMjUyLjA2Miw1MDIuMzUyeiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojRjdFM0FGOyIgZD0iTTEwMi43OTQsNzUuODE1bDI1MS42NjgsMTI1LjI0M2w1MS4yLTI1LjIwNkwxNTMuMjA2LDUwLjYxTDEwMi43OTQsNzUuODE1eiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojRjFEOTk5OyIgZD0iTTM1NC40NjIsMjAxLjA1OWw1MS4yLTI1LjIwNnY3OC43NjlsLTEzLjc4NS0yLjM2M2wtMTQuNTcyLDE3LjcyM2wtMjIuODQzLTEuNTc1ICBDMzU0LjQ2MiwyNjguNDA2LDM1NC40NjIsMjAxLjA1OSwzNTQuNDYyLDIwMS4wNTl6Ii8+CjxwYXRoIHN0eWxlPSJmaWxsOiNGMkYyRjI7IiBkPSJNMjAwLjA3NCwzNTEuOTAybC04NS4wNzEtNDIuNTM1Yy00LjcyNi0yLjM2My04LjY2NSwwLjM5NC04LjY2NSw2LjMwMnY1Ny4xMDggIGMwLDUuOTA4LDMuOTM4LDEyLjYwMyw4LjY2NSwxNC45NjZsODUuNDY1LDQyLjUzNWM0LjcyNiwyLjM2Myw4LjY2NS0wLjM5NCw4LjY2NS02LjMwMnYtNTcuNTAyICBDMjA4LjczOCwzNjAuNTY2LDIwNC44LDM1NC4yNjYsMjAwLjA3NCwzNTEuOTAyeiBNMTgwLjc3NSwzOTguNzdsLTU0LjM1MS0yNy4xNzVjLTIuMzYzLTEuMTgyLTQuMzMyLTQuNzI2LTQuMzMyLTcuODc3ICBzMS45NjktNC43MjYsNC4zMzItMy41NDVsNTQuMzUxLDI3LjE3NWMyLjM2MywxLjE4Miw0LjMzMiw0LjcyNiw0LjMzMiw3Ljg3N1MxODMuMTM4LDM5OS45NTEsMTgwLjc3NSwzOTguNzd6IE0xODguNjUyLDM3OS4wNzcgIGwtNjIuMjI4LTMxLjUwOGMtMi4zNjMtMS4xODItNC4zMzItNC43MjYtNC4zMzItNy44NzdzMS45NjktNC43MjYsNC4zMzItMy41NDVsNjIuMjI4LDMxLjUwOGMyLjM2MywxLjE4Miw0LjMzMiw0LjcyNiw0LjMzMiw3Ljg3NyAgQzE5Mi45ODUsMzc5LjA3NywxOTEuMDE1LDM4MC4yNTgsMTg4LjY1MiwzNzkuMDc3eiIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" style="
+    width: 64px;
+    height: 64px;
+">
+                                                    <span class="counter">[[ package.products.length ]]</span>
+                                                    <small>[[ package.width ]] x [[ package.length ]] x [[ package.height ]] / [[ package.weight ]] kg</small>
+                                                </div>
+                                                <popover trigger="hover" :title="'Pacote ' + (index+1) + ' - ' + package.width + ' x ' + package.length + ' x ' + package.height + ' / ' + package.weight + 'kg'" :target="'#box' + index">
+                                                    <template slot="popover">
+                                                        <div style="position: relative;">
+                                                            <ul class="package-items">
+                                                                <li v-for="product in package.products" v-html="product.name"></li>
+                                                            </ul>
+
+                                                            <template v-if="package.isOnCart || (!package.isOnCart && !package.tracking)">
+                                                                <uiv-btn v-tooltip="'Remover pacote'" @click="removerPacote(package)" type="danger" size="xs" style="width: 25px; position: absolute; top: -2px; right: -10px; margin-right: 5px;">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </uiv-btn>
+                                                            </template>
+
+                                                            <template v-if="!package.isOnCart && package.tracking">
+                                                                <div class="text-center">
+                                                                    <span class="label label-warning" v-if="package.tracking.status === 'pending'">Pendente</span>
+                                                                    <span class="label label-primary" v-else-if="package.tracking.status === 'posted'">Em trânsito</span>
+                                                                    <span class="label label-warning" v-else-if="package.tracking.status === 'released'">Aguardando postagem</span>
+                                                                    <span class="label label-success" v-else-if="package.tracking.status === 'delivered'">Entregue</span>
+                                                                    <span class="label label-danger" v-else-if="package.tracking.status === 'canceled'">Cancelado</span>
+                                                                    <span class="label label-danger" v-else-if="package.tracking.status === 'undelivered'">Não entregue</span>
+                                                                </div>
+                                                            </template>
+                                                            <template v-else-if="package.isOnCart">
+                                                                <div class="text-center"><span class="label label-success" v-if="package.tracking.status === 'pending'">Adicionado ao carrinho</span></div>
+                                                            </template>
+
+                                                            <template v-if="package.tracking && package.tracking.status === 'posted' && package.tracking.melhorenvio_tracking">
+                                                                <div class="text-center" style="margin-top: 10px;">
+                                                                    <a :href="'https://melhorrastreio.com.br/rastreio/' + package.tracking.melhorenvio_tracking" target="_blank">
+                                                                        <span class="label label-primary">Rastreamento</span>
+                                                                    </a>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </popover>
+                                            </div>
+
+                                            <div class="box-ctn" v-if="productList.length > 0">
+                                                <div class="box" @click="addPacote()">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                    Pacote
+                                                </div>
+                                            </div>
+                                            <div class="box-ctn" v-else-if="productList.length == 0 && packages.length > 0 && canCart" style="margin-left: auto;">
+                                                <div id="box-cart" class="box" @click="updateOrderPackages(true)" style="background-color: #67D867; color: #fff !important;">
+                                                    <i class="fa fa-cart-plus"></i>
+                                                    Adicionar ao Carrinho
+                                                </div>
+                                                <popover trigger="hover" title="Carrinho" target="#box-cart">
+                                                    <template slot="popover">
+                                                        <p>Adiciona os pacotes ao carrinho, caso algum pacote já tenha sido adicionado ele não será adicionado novamente.</p>
+                                                    </template>
+                                                </popover>
+                                            </div>
+                                            <div class="box-ctn" v-else-if="canPay && packages.length > 0" style="margin-left: auto; margin-right: 0;">
+                                                <a :href="conf.baseUri + '/carrinho'" target="_blank">
+                                                    <div class="box" style="display: inline-flex; background-color: #67D867; color: #fff !important;">
+                                                        <i class="fa fa-shopping-cart"></i>
+                                                        Ver Carrinho
+                                                    </div>
+                                                </a>
+                                                <!--
+                                                <a :href="conf.baseUri + '/checkout'" target="_blank">
+                                                    <div class="box" style="display: inline-flex; background-color: #4cb64c; color: #fff !important;">
+                                                        <i class="fa fa-dollar"></i>
+                                                        Pagamento
+                                                    </div>
+                                                </a>
+                                                -->
+                                            </div>
+                                        </div>
+
+                                        <legend>Passos</legend>
+                                        1) Clique em <b>+ Pacote</b> e siga os passos informados no Modal <br>
+                                        2) Após criar o(s) Pacote(s) vai aparecer o botão <b>Adicionar ao Carrinho</b>, clique nele<br>
+                                        3) Vai ser adicionado ao Carrinho do Melhor Envio, clique no botão <b>Ver Carrinho</b><br>
+                                        4) Pronto, agora no Carrinho do Melhor Envio só clicar em <b>FINALIZAR PAGAMENTO</b> para ir para o Checkout e Comprar a Etiqueta<br>
+                                        <br>
+                                        Os passos servem para adicionar o Pacote ao Carrinho do Melhor Envio, facilitando a compra da etiqueta de envio
+                                    </div>
+                                </div>
+                            </div>
+
+                            <uiv-modal v-model="modalPacote" title="Adicionar Pacote" :header="true" :backdrop="false" size="lg" :keyboard="true">
+                                <template slot="footer">
+                                    <button type="button" class="btn btn-danger pull-left" @click="cancel()">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" :disabled="!isValidPacote()" @click="savePacote()">Salvar Pacote</button>
+                                </template>
+                                <div class="row">
+                                     <div class="col-md-12">
+                                        <legend>Dimensões e Peso</legend>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Comprimento (cm)</label>
+                                            <input type="text" maxlength="6" v-model="pacote.width" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Largura (cm)</label>
+                                            <input type="text" maxlength="6" v-model="pacote.length" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Altura (cm)</label>
+                                            <input type="text" maxlength="6" v-model="pacote.height" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Peso (kg)</label>
+                                            <input type="text" maxlength="6" v-model="pacote.weight" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <legend>Produtos</legend>
+                                    </div>
+                                    <template v-if="productList.length > 0">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <select class="form-control" v-model="pacote.currentProductSelection">
+                                                    <option :value="product" v-for="product in productList">[[ product.name ]] ([[ product.model ]])</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <button class="btn btn-primary btn-block"
+                                                        :disabled="pacote.currentProductSelection ? false:true"
+                                                        @click="addProduct()"
+                                                >Adicionar ao pacote
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-top: 10px;">
+                                        <template v-for="(product, index) in pacote.products">
+                                            <div class="product-item">
+                                                [[ product.name ]]
+
+                                                <div class="product-remove" @click="removeProduct(product, 'old')">
+                                                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template v-for="(product, index) in pacote.newProducts">
+                                            <div class="product-item">
+                                                [[ product.name ]]
+
+                                                <div class="product-remove" @click="removeProduct(product, 'new')">
+                                                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 8px;">
+                                        <legend>Nota Fiscal (Opcional)</legend>
+                                        <div class="form-group">
+                                            <label>Chave de Acesso da Nota Fiscal do Pacote</label>
+                                            <input type="text" class="form-control" v-model="pacote.nota.key" placeholder="Informe a Chave de Acesso da Nota Fiscal do Pacote">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 8px;">
+                                        <legend>Declarar Valor</legend>
+                                        <div class="form-group">
+                                            <label>Valor Seguro</label>
+                                            <input type="text" class="form-control" v-model="pacote.declarar" placeholder="Informe o valor de seguro do envio">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 8px;margin-bottom: 0px;">
+                                        <div>
+                                            <legend>Passos</legend>
+                                            1) Altere se preciso as dimensões e peso do Pacote <br>
+                                            2) Informe a Chave de Acesso da  Nota Fiscal do Pacote (opcional) e o Valor do Seguro, caso queira alterar<br>
+                                            3) Clique em <b>Salvar Pacote</b> <br>
+                                            Obs: Caso não informe a Chave da Nota Fiscal, vai ser usada <a href='https://central.melhorenvio.com.br/pt-BR/?q=declara%C3%A7%C3%A3o+de+conte%C3%BAdo' target='_blank'>Declaração de Conteúdo no Melhor Envio</a>, recomendado usar Nota Fiscal<br>
+                                            <br><b>Chave de Acesso da Nota Fiscal:</b> número de 44 dígitos presentes no DANFE (Documento Auxiliar de Nota Fiscal Eletrônica)<br>
+                                            <b>Valor Seguro:</b> deve conter o valor de seguro do envio
+                                        </div>
+                                    </div>
+                                </div>
+                            </uiv-modal>
+                        </div>
+                    </div>
+                {% endif %}
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[
+                {{ footer }}
+            ]]></search>
+            <add position="before"><![CDATA[
+                {% if menvio is not empty %}
+                    {# melhor_envio_xml Vue Melhor Envio #}
+                    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js" integrity="sha512-pSyYzOKCLD2xoGM1GwkeHbdXgMRVsSqQaaUoHskx/HF09POwvow2VfVEdARIYwdeFLbu+2FCOTRYuiyeGxXkEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js" integrity="sha512-XdUZ5nrNkVySQBnnM5vzDqHai823Spoq1W3pJoQwomQja+o4Nw0Ew1ppxo5bhF2vMug6sfibhKWcNJsG8Vj9tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/uiv/1.3.1/uiv.min.js" integrity="sha512-W72YlcTMpRKtjUxeG+j53aQ7greX70S7Xs7BIxLSU+3NB5gdZGPnrV5Csf8EdRk2HfgYpo5gfr/EaQ9c4CDoIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.33.1/dist/sweetalert2.all.min.js" integrity="sha256-Qfxgn9jULeGAdbaeDjXeIhZB3Ra6NCK3dvjwAG8Y+xU=" crossorigin="anonymous"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/lsbridge@0.2.0/build/lsbridge.min.js" integrity="sha256-+pttvCUr6rXEx0whwnWCoQ2v848GVKK6YAqM4TASJOY=" crossorigin="anonymous"></script>
+
+                    <script>
+                        /**
+                         * CARRINHO:
+                         * - Ao adicionar no carrinho o retorno da etiqueta é gravado aos dados
+                         * do frete na tabela code_melhorenvio, e o inverso ocorre ao remover do carrinho.
+                         * - Após a verificaçao da etiqueta caso a mesma esteja cancelada removemos do banco
+                         * para permitir uma nova compra. Caso esteja no carrinho ou em transito nao permitimos
+                         * a compra. Para casos que haja rastreamento exibiremos o botao para abrir o rastreamento
+                         * e acompahar o envio.
+                         */
+                        Vue.use(window.uiv, {prefix: 'uiv'});
+                        new Vue({
+                            el: '#menvio',
+                            delimiters: ['[[', ']]'],
+                            data() {
+                                return {
+                                    ready: false,
+                                    menvio: null,
+                                    baseUri: 'https://sandbox.melhorenvio.com.br',
+                                    conf: null,
+                                    products: [],
+                                    productList: [],
+                                    packages: [],
+                                    totalProducts: 0,
+                                    productsProgress: 0,
+                                    modalPacote: false,
+                                    pacote: {
+                                        weight: '',
+                                        width: '',
+                                        length: '',
+                                        height: '',
+                                        currentProductSelection: null,
+                                        products: [],
+                                        newProducts: [],
+                                        nota: {
+                                            key: ''
+                                        }
+                                    },
+                                    canPay: false,
+                                    canCart: false,
+                                    loading: false,
+                                    updater: null,
+                                }
+                            },
+                            async created() {
+                                await this.fetchOrder('start');
+                            },
+                            async mounted() {
+                                this.timer('start');
+                            },
+                            methods: {
+                                async timer(action) {
+                                    if (action === 'pause' && this.updater) {
+                                        window.clearTimeout(this.updater);
+                                        console.log('updater pausado');
+                                        this.updater = null;
+                                    } else if (action === 'start' && !this.updater) {
+                                        console.log('updater iniciado')
+
+                                        await this.fetchOrder();
+
+                                        this.updater = setInterval(async () => {
+                                            await this.fetchOrder();
+                                        }, 10000);
+                                    } else {
+                                        return false;
+                                    }
+                                },
+                                async fetchOrder(type = null) {
+                                    let {data} = await axios.get('{{ constant('HTTPS_CATALOG') }}/index.php?route=extension/shipping/code_melhorenvio/order&id=' + {{ order_id }}, {
+                                        withCredentials: true
+                                    });
+
+                                    if (data.quote) {
+                                        this.menvio = data.quote;
+                                        this.conf = data.conf;
+                                        this.packages = data.packages;
+                                        this.products = data.products;
+                                        this.totalProducts = data.totalProducts;
+                                        this.insuranceValue = data.insuranceValue;
+
+
+                                        this.productList = [];
+                                        await _.forEach(this.products, async (product) => {
+                                            for (let i = 0; i < parseInt(product.quantity); i++) {
+                                                let p = _.clone(product);
+
+                                                this.productList.push(p);
+                                            }
+                                        });
+
+                                        await _.forEach(this.packages, async (package) => {
+                                            await _.forEach(package.products, async (product) => {
+                                                const index = _.findIndex(this.productList, {id: product.id});
+                                                if (index >= 0) {
+                                                    this.$delete(this.productList, index);
+                                                }
+                                            });
+                                        });
+
+
+                                        this.ready = true;
+                                    } else {
+                                        this.ready = false;
+                                    }
+                                },
+                                addPacote() {
+                                    this.pacote = {
+                                        weight: '{{ menvio.packages[0].weight }}',
+                                        width: '{{ menvio.packages[0].dimensions.width }}',
+                                        length: '{{ menvio.packages[0].dimensions.length }}',
+                                        height: '{{ menvio.packages[0].dimensions.height }}',
+                                        declarar: this.insuranceValue,
+                                        currentProductSelection: null,
+                                        products: [],
+                                        newProducts: this.productList,
+                                        nota: {
+                                            key: ''
+                                        }
+                                    }
+                                    this.timer('pause');
+                                    this.modalPacote = true;
+                                    this.productList = [];
+                                },
+                                addProduct() {
+                                    this.pacote.newProducts.push(this.pacote.currentProductSelection);
+
+                                    let index = _.findIndex(this.productList, {id: this.pacote.currentProductSelection.id});
+                                    this.$delete(this.productList, index)
+
+                                    this.pacote.currentProductSelection = null;
+                                },
+                                async removeProduct(product, type = 'new') {
+                                    if (type == 'new') {
+                                        let index = _.findIndex(this.pacote.newProducts, {id: product.id});
+                                        await this.$delete(this.pacote.newProducts, index);
+                                    } else {
+                                        let index = _.findIndex(this.pacote.products, {id: product.id});
+                                        await this.$delete(this.pacote.products, index);
+                                    }
+
+
+                                    this.productList.push(product);
+                                },
+                                async cancel() {
+                                    console.log(this.pacote.newProducts);
+                                    let products = _.clone(this.pacote.newProducts);
+
+                                    await _.forEach(products, async (product) => {
+                                        if (product && product.id) {
+                                            await this.removeProduct(product, 'new');
+                                        }
+                                    });
+
+                                    this.modalPacote = false;
+                                },
+                                isValidPacote() {
+                                    if (this.pacote.width == 0 || this.pacote.height == 0 || this.pacote.length == 0 || this.pacote.weight == 0) {
+                                        return false;
+                                    }
+
+                                    if (this.pacote.products.length === 0 && this.pacote.newProducts.length === 0) {
+                                        return false
+                                    }
+
+                                    return true;
+                                },
+                                async savePacote() {
+                                    let pacote = _.clone(this.pacote);
+                                    let products = _.merge(pacote.products, pacote.newProducts);
+
+                                    pacote.width = parseFloat(pacote.width);
+                                    pacote.height = parseFloat(pacote.height);
+                                    pacote.weight = parseFloat(pacote.weight);
+                                    pacote.length = parseFloat(pacote.length);
+                                    pacote.declarar = parseFloat(pacote.declarar);
+                                    pacote.isOnCart = false;
+
+                                    pacote.products = products;
+
+                                    let packages = _.clone(this.packages);
+                                    packages.push(pacote);
+
+                                    let data = await this.updateOrderPackages(false, packages);
+
+                                    if (data.success) {
+                                        this.packages.push(pacote);
+
+                                        this.modalPacote = false;
+                                    } else {
+                                        alert('Problemas encontrados, entre em contato com o suporte')
+                                    }
+
+                                    this.canPay = false;
+                                },
+                                async updateOrderPackages(buy, packages = null) {
+                                    this.loading = true;
+
+                                    let tmpPackages = packages;
+
+                                    if (packages === null) {
+                                        packages = _.clone(this.packages);
+                                    }
+
+                                    let {data} = await axios.post('{{ constant('HTTPS_CATALOG') }}/index.php?route=extension/shipping/code_melhorenvio/add', {
+                                        order: {{ order_id }},
+                                        packages: packages,
+                                        buy: buy
+                                    }, {
+                                        withCredentials: true
+                                    });
+
+                                    this.loading = false;
+
+                                    if (data.success && buy) {
+                                        Swal(
+                                            'Sucesso!',
+                                            'Pacotes adicionados ao carrinho do Melhor Envio! <br><br> Clique em <b>Ver Carrinho</b> para ir ao Carrinho',
+                                            'success'
+                                        )
+                                    } else if (data.success && !buy) {
+                                        Swal(
+                                            'Sucesso!',
+                                            'Pacote adicionado ao pedido!',
+                                            'success'
+                                        )
+                                    } else {
+                                        //console.log(data);
+                                        if(data.error) {
+                                            Swal(
+                                                'Ops!',
+                                                'Por favor verificar os erros retornados: <br>'+data.error,
+                                                'error'
+                                            )
+                                        }else{
+                                            Swal(
+                                                'Ops!',
+                                                'Encontramos problemas...<br> Por favor verifique se está completo o cadastro do cliente, endereço, configuração da integração e chave da nota fiscal.',
+                                                'error'
+                                            )
+                                        }
+                                    }
+
+                                    if (tmpPackages === null) {
+                                        this.timer('start');
+                                        await this.fetchOrder();
+                                    }
+
+
+                                    return data;
+                                },
+                                async editPacote() {
+                                    alert('Em desenvolvimento..');
+                                },
+                                async removerPacote(package) {
+                                    this.loading = true;
+                                    this.timer('pause');
+
+                                    let index = await _.findIndex(this.packages, package);
+
+                                    await _.forEach(package.products, async (product) => {
+                                        await this.productList.push(product);
+                                    })
+
+
+                                    // delete package from list
+                                    this.$delete(this.packages, index);
+
+
+                                    let {data} = await axios.post('{{ constant('HTTPS_CATALOG') }}/index.php?route=extension/shipping/code_melhorenvio/remove', {
+                                        order: {{ order_id }},
+                                        packages: this.packages,
+                                        package: package
+                                    }, {
+                                        withCredentials: true
+                                    });
+
+                                    if (package.isOnCart) {
+                                        this.timer('start');
+                                    }
+
+                                    this.loading = false;
+                                }
+                            },
+                            watch: {
+                                productList() {
+                                    this.productsProgress = parseInt(((this.totalProducts - this.productList.length) / this.totalProducts * 100).toFixed(0));
+                                },
+                                packages: {
+                                    async handler() {
+                                        this.canPay = false;
+                                        this.canCart = false;
+
+                                        let testPay = [];
+                                        let testCart = [];
+
+                                        await _.forEach(this.packages, (package) => {
+                                            testPay.push(package.isOnCart);
+
+                                            if (!package.isOnCart && package.tracking && package.tracking.status === 'canceled') {
+                                                testCart.push(true);
+                                            } else if (!package.isOnCart && !package.tracking) {
+                                                testCart.push(true);
+                                            } else {
+                                                testCart.push(false);
+                                            }
+                                        });
+
+                                        this.canPay = (_.indexOf(testPay, false) < 0 && this.productList.length === 0) || ((_.indexOf(testPay, false) >= 0 && this.productList.length > 0));
+                                        this.canCart = (_.indexOf(testCart, true) >= 0 && this.productList.length === 0) || (_.indexOf(testCart, true) < 0 && this.productList.length > 0);
+
+                                    }, deep: true
+                                }
+                            }
+                        });
+                    </script>
+                    {# fim Vue Melhor Envio#}
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- GATILHO ADICIONAR AO CARRINHO DO MELHOR ENVIO -->
+    <!--
+    <file path="catalog/model/checkout/order.php">
+        <operation>
+            <search index="0"><![CDATA[
+                $this->cache->delete('product');
+            ]]></search>
+            <add position="after" trim="true"><![CDATA[
+                require_once DIR_SYSTEM . '/library/code/code_menvio/lib/MelhorEnvio.php';
+
+                $this->load->model('module/codemarket_module');
+                $config = $this->model_module_codemarket_module->getModulo('524');
+
+                if ($order_info['order_status_id'] == $config->status_paid->order_status_id) {
+                    $me = new MelhorEnvio($this->registry);
+                    $me->autoPost($order_info['order_id']);
+                }
+            ]]></add>
+        </operation>
+    </file>
+    -->
+
+    <!-- VERSAO -->
+    <file path="catalog/model/module/code_activemodule.php">
+        <operation>
+            <search><![CDATA[
+                //eventVersionApp
+            ]]></search>
+            <add position="after"><![CDATA[
+                $data['524'] = [
+                    'version' => '4.4',
+                    'date' => '20/10/2021'
+                ];
+            ]]></add>
+        </operation>
+    </file>
+</modification>
