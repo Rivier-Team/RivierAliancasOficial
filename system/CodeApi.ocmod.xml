@@ -1,0 +1,139 @@
+<!--
+    Copyright 2013-2021 Codemarket - Todos os direitos reservados.
+    Alterado 11/03/2021
+-->
+<modification>
+    <name><![CDATA[<font color="#00a99d"><b>Codemarket - Painel Codemarket 1.1</b></font>]]></name>
+    <code><![CDATA[Codemarket - Painel Codemarket]]></code>
+    <version><![CDATA[1.1]]></version>
+    <author><![CDATA[<font color="#00a99d"><b>Codemarket - codemarket.com.br</b></font>]]></author>
+    <link>https://www.codemarket.com.br</link>
+
+    <file path="admin/controller/common/column_left.php">
+        <operation>
+            <search><![CDATA[
+                // Extension
+            ]]></search>
+            <add position="before"><![CDATA[
+            	if(!empty($this->config->get('config_code_key_api'))){
+	                $data['menus'][] = array(
+	                    'id'       => 'codemarket-plataform',
+	                    'icon'     => 'fa-trophy',
+	                    'name'     => 'Módulos Premium',
+	                    'href'     => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], true),
+	                    'children' => []
+	                );
+            	}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ADICIONANDO NA CONFIGURACAO O CODEMARKET - CHAVE API -->
+    <file path="admin/controller/setting/setting.php">
+        <operation>
+            <search>
+                <![CDATA[
+                    if (isset($this->request->post['config_meta_title'])) {
+                ]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                    if (isset($this->request->post['config_code_key_api'])) {
+                        $data['config_code_key_api'] = $this->request->post['config_code_key_api'];
+                    } else {
+                        $data['config_code_key_api'] = $this->config->get('config_code_key_api');
+                    }
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/setting/setting.twig">
+        <operation>
+            <search>
+                <![CDATA[
+                    <label class="col-sm-2 control-label" for="input-encryption"><span data-toggle="tooltip" title="{{ help_encryption }}">{{ entry_encryption }}</span></label>
+                ]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                      <label class="col-sm-2 control-label" for="input-key-code"><span data-toggle="tooltip" title="Chave criada para a sua Loja na Codemarket, pegar os dados em Lojas na codemarket.com.br">Codemarket - Chave API</span></label>
+                      <div class="col-sm-10">
+                        <input type="text" name="config_code_key_api" value="{{ config_code_key_api }}" placeholder="Informe a Chave API da sua Loja" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- EXIBIR A LISTAGEM DO PAINEL CODEMARKET NAS EXTENSOES -->
+    <file path="admin/controller/marketplace/extension.php">
+        <operation>
+            <search>
+                <![CDATA[
+                    $this->response->setOutput($this->load->view('marketplace/extension', $data));
+                ]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                    $config_code_api_token = $this->config->get('config_code_api_token');
+
+                    if(!empty($config_code_api_token)){
+                        $config_code_api_token = $this->config->get('config_code_api_token');
+                        $data['code_url_modules'] = "https://api.codemarket.com.br/app/list/".$config_code_api_token;
+                    }
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/marketplace/extension.twig">
+        <operation>
+            <search>
+                <![CDATA[
+                    <div id="extension"></div>
+                ]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+                    {% if code_url_modules is not empty %}
+                        <iframe src="{{ code_url_modules }}" frameborder="0" width="100%" style="height:500px;" scrolling="auto"></iframe>
+                    {% endif %}
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- DESATIVAR DO MODO MANUTENCAO -->
+    <file path="catalog/controller/startup/maintenance.php">
+        <operation>
+            <search>
+                <![CDATA[
+                    if ((substr($route, 0, 17) != 'extension/payment' && substr($route, 0, 3) != 'api') && !in_array($route, $ignore) && !$this->user->isLogged()) {
+                ]]>
+            </search>
+            <add position="replace">
+                <![CDATA[
+                    if ((substr($route, 0, 4) != 'code' && strpos($route, 'code_') === false && substr($route, 0, 17) != 'extension/payment' && substr($route, 0, 3) != 'api') && !in_array($route, $ignore) && !$this->user->isLogged()) {
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- VERSAO -->
+    <file path="catalog/model/module/code_activemodule.php">
+        <operation>
+            <search><![CDATA[
+                //eventVersionApp
+            ]]></search>
+            <add position="after"><![CDATA[
+                $data['1'] = [
+                    'version' => '1.1',
+                    'date' => '11/03/2021'
+                ];
+            ]]></add>
+        </operation>
+    </file>
+</modification>
