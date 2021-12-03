@@ -241,11 +241,16 @@
 @media (max-width: 768px)
 {
    // ===================== NAV
-   .nav__logo img
-   {
-       height: 3.5rem;
-   }
+   .nav__logo 
+   { transform: scale(.5); }
+   .header 
+   { margin-top: 4rem; }
+    .scroll-header
+    { margin-top: 0rem; }
 
+
+   #top
+   { margin-top: 11rem; }
 
    // ===================== CardProduto
     .container_produto
