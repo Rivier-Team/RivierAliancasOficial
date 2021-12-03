@@ -1,0 +1,82 @@
+
+.search-box{
+   position: relative;
+   height: 60px;
+   width: 60px;
+   transform: scale(.8);
+   border-radius: 50%;
+   box-shadow: 5px 5px 30px rgba(0,0,0,.2);
+   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+ }
+ .search-box.active{
+   width: 350px;
+ }
+ .search-box input{
+   width: 100%;
+   height: 100%;
+   border: none;
+   border-radius: 50px;
+   background: var(--title-color);
+   outline: none;
+   padding: 0 60px 0 20px;
+   font-size: 18px;
+   opacity: 0;
+   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+ }
+ .search-box input.active{
+   color: var(--container-color);
+   opacity: 1;
+ }
+ .search-box input::placeholder{
+   color: #a6a6a6;
+ }
+ .search-box .search-icon{
+   position: absolute;
+   right: 0px;
+   top: 50%;
+   transform: translateY(-50%);
+   height: 60px;
+   width: 60px;
+   background: var(--main-color);
+   border-radius: 50%;
+   text-align: center;
+   line-height: 4rem;
+   font-size: 1.5em;
+   color: var(--title-color);
+   cursor: pointer;
+   z-index: 1;
+   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+ }
+ .search-box .search-icon.active{
+   right: 5px;
+   height: 50px;
+   line-height: 3.5rem;
+   width: 50px;
+   background: var(--main-color);
+   color: var(--title-color);
+   transform: translateY(-50%) rotate(360deg);
+ }
+ .search-box .cancel-icon{
+   position: absolute;
+   right: 0rem;
+   top: 65%;
+   transform: translateY(-50%);
+   font-size: 3em;
+   color: var(--aux-color);
+   cursor: pointer;
+   transition: all 0.5s 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+ }
+ .search-box .cancel-icon.active{
+   right: -3rem;
+   transform: translateY(-50%) rotate(360deg);
+ }
+ .search-box .search-data{
+   text-align: center;
+   padding-top: 7px;
+   color: var(--main-color);
+   font-size: 18px;
+   word-wrap: break-word;
+ }
+ .search-box .search-data.active{
+   display: none;
+ }

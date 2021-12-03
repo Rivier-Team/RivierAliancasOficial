@@ -1,0 +1,54 @@
+/*=============== THEME ===============*/
+/*========== Variables Dark theme ==========*/
+body.dark-theme{
+    --first-color: hsl(43, 74%, 39%);
+    --button-color: hsl(0, 0%, 24%);
+    --button-color-alt: hsl(0, 0%, 28%);
+    --title-color: hsl(0, 0%, 95%);
+    --text-color: hsl(0, 0%, 75%);
+    --body-color: hsl(0, 0%, 12%);
+    --container-color: hsl(0, 0%, 16%);
+    --border-color: hsl(0, 0%, 20%);
+    --background-color: hsl(0, 0%, 12%);
+    --shadow-color: rgba(112, 112, 112, 0.3);
+}
+
+/*========== Button Dark/Light ==========*/
+.change-theme {
+    color: var(--title-color);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.change-theme.moon { display: none;}
+.change-theme.sunny { display: none;}
+
+.change-theme.moon.ativo { display: flex;}
+.change-theme.sunny.ativo { display: flex;}
+
+
+/*========== 
+    Color changes in some parts of 
+    the website, in dark theme 
+==========*/
+
+.dark-theme .change-theme,
+.dark-theme .nav__toggle,
+.dark-theme .nav__shop,
+.dark-theme .button--gray{
+    color: hsl(0, 0%, 95%);
+}
+
+.dark-theme .scroll-header{
+    box-shadow: 0 1px 4px var(--shadow-color);
+}
+
+.scroll-header .change-theme,
+.scroll-header .nav__toggle,
+.scroll-header .nav__shop{
+    color: var(--title-color);
+}
+
+.dark-theme::-webkit-scrollbar{
+    background: var(--body-color);
+}

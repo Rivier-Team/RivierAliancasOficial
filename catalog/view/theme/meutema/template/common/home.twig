@@ -1,0 +1,82 @@
+{{ header }}
+<div id="common-home" class="container">
+	<div class="row">{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-9' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">{{ content_top }}{{ content_bottom }}</div>
+		{{ column_right }}
+	</div>
+</div>
+
+
+{# ==================== MAIN ==================== #}
+<main class="main">
+
+	{# ==================== STORY ==================== #}
+	<section class="story section container" id="sobrenos">
+		<div class="story__container grid">
+			<div class="story__data">
+				<h2 class="section__title">
+					<div class="underline">
+						<span></span>
+					</div>
+					Nossa História
+				</h2>
+
+				<h1 class="story__title">
+					Aliança inspiradora
+					<br>
+					deste ano
+				</h1>
+
+				<p class="story__description">
+					As alianças mais recentes e modernos deste ano, estão disponíveis
+										                        em várias apresentações nesta loja, descubra-os agora.
+				</p>
+
+				<a href="#" class="button button--small">Ver mais</a>
+			</div>
+
+			<div class="story__images">
+				<img src="catalog/view/theme/meutema/img/logoTitle.jpeg" alt="" class="story__img">
+				<div class="story__square"></div>
+			</div>
+		</div>
+	</section>
+
+
+	{# ==================== NEWSLETTER ==================== #}
+	<section class="newsletter section container">
+		<div class="newsletter__bg grid">
+			<div>
+				<h2 class="newsletter__title">Assine nossa
+					<br>
+					Newsletter</h2>
+				<p class="newsletter__description">
+					Não perca seus descontos. Assine nosso boletim informativo
+										                        por e-mail para obter as melhores ofertas, descontos,
+										                        cupons, presentes e muito mais .
+				</p>
+			</div>
+
+			<form action="" class="newsletter__subscribe">
+				<input type="email" placeholder="Entre com email" class="newsletter__input">
+				<button class="button">
+					INSCREVER
+				</button>
+			</form>
+		</div>
+	</section>
+</main>
+
+<!--=============== SCROLL UP ===============-->
+<a href="#" class="scrollup" id="scroll-up">
+	<ion-icon name="chevron-up-outline" class="scrollup__icon"></ion-icon>
+</a>
+
+{{ footer }}

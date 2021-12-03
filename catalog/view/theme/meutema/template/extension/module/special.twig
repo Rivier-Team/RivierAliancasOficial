@@ -1,0 +1,39 @@
+{# ==================== PRODUCTS ==================== #}
+<section class="Produtos section container" id="promocoes">
+	<h2 class="section__title">
+		<div class="underline">
+			<span></span>
+		</div>
+		{{heading_title}}
+	</h2>
+
+	<div class="products__container grid">
+
+		{% for product in products %}
+
+			<article class="products__card">
+				<a href="{{ product.href }}"><img src="{{ product.thumb }}" loading="lazy" alt="{{ product.name }}" title="{{ product.name }}" class="products__img"/></a>
+
+				<h3 class="products__title">{{product.name}}</h3>
+
+
+				{% if product.price %}
+					<p class="price">
+						{% if not product.special %}
+							<span class="products__price">{{ product.price }}</span>
+						{% else %}
+							<s class="price-old">{{ product.price }}</s>
+							<span class="products__price">{{ product.special }}</span>
+						{% endif %}
+					</p>
+				{% endif %}
+        <br>
+				<button type="button" class="button products__button" onclick="cart.add('{{ product.product_id }}');" >
+					<ion-icon name="cart-outline"></ion-icon>
+				</button>
+
+			</article>
+		{% endfor %}
+
+	</div>
+</section>

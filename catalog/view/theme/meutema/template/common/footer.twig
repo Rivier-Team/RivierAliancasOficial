@@ -1,0 +1,110 @@
+<footer>
+	<div class="row">
+		<div class="col">
+			<img src="./catalog/view/theme/meutema/img/logoTitle.jpeg" class="logo">
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt aut doloremque accusantium.
+																								                    Deserunt aut doloremque accusantium. ut doloremque accusantium. Libero, commodi. Id voluptates
+																								                    sequi.
+			</p>
+		</div>
+		{% if informations %}
+			<div class="col col-sm-3">
+				<h3>{{ text_information }}
+					<div class="underline">
+						<span></span>
+					</div>
+				</h3>
+				<ul class="list-unstyled">
+					{% for information in informations %}
+						<li>
+							<a href="{{ information.href }}">{{ information.title }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+		
+		<div class="col col-sm-3">
+			<h3>{{ text_service }}
+				<div class="underline">
+					<span></span>
+				</div>
+			</h3>
+			<ul class="list-unstyled">
+				<li>
+					<a href="{{ contact }}">{{ text_contact }}</a>
+				</li>
+				<li>
+					<a href="{{ return }}">{{ text_return }}</a>
+				</li>
+				<li>
+					<a href="{{ sitemap }}">{{ text_sitemap }}</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="col col-sm-3">
+			<h3>{{ text_extra }}
+				<div class="underline">
+					<span></span>
+				</div>
+			</h3>
+			<ul class="list-unstyled">
+				<li>
+					<a href="{{ manufacturer }}">{{ text_manufacturer }}</a>
+				</li>
+				<li>
+					<a href="{{ voucher }}">{{ text_voucher }}</a>
+				</li>
+				<li>
+					<a href="{{ affiliate }}">{{ text_affiliate }}</a>
+				</li>
+				<li>
+					<a href="{{ special }}">{{ text_special }}</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="col col-sm-3">
+			<h3>{{ text_account }}
+				<div class="underline">
+					<span></span>
+				</div>
+			</h3>
+			<ul class="list-unstyled">
+				<li>
+					<a href="{{ account }}">{{ text_account }}</a>
+				</li>
+				<li>
+					<a href="{{ order }}">{{ text_order }}</a>
+				</li>
+				<li>
+					<a href="{{ wishlist }}">{{ text_wishlist }}</a>
+				</li>
+				<li>
+					<a href="{{ newsletter }}">{{ text_newsletter }}</a>
+				</li>
+			</ul>
+		</div>
+		<hr>
+
+	</div>
+	<p class="copyright">{{ powered }}
+		- VRAUS Group</p>
+</footer>
+
+
+{% for style in styles %}
+	<link rel="{{ style.rel }}" type="text/css" href="{{ style.href }}" media="{{ style.media }}"/>
+{% endfor %}
+{% for script in scripts %}
+	<script type="text/javascript" src="{{ script }}"></script>
+{% endfor %}
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+
+<script type="text/javascript" src="catalog/view/javascript/swiper-bundle.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script type="text/javascript" src="catalog/view/javascript/main.js"></script></body></html>

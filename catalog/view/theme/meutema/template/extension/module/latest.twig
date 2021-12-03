@@ -1,0 +1,43 @@
+<section class="featured section container" id="novidades">
+	<h2 class="section__title">
+		<div class="underline">
+			<span></span>
+		</div>
+		{{heading_title}}
+	</h2>
+
+	<div class="new__container">
+		<div class="swiper new-swiper">
+			<div class="swiper-wrapper">
+				{% for product in products %}
+
+					<article class="new__card swiper-slide">
+						<span class="new__tag">Novo</span>
+    				<a href="{{ product.href }}"><img src="{{ product.thumb }}" loading="lazy" alt="{{ product.name }}" title="{{ product.name }}" class="new__img"/></a>
+
+						<div class="new__data">
+
+							<h3 class="new__title">{{product.name}}</h3>
+
+							{% if product.price %}
+								<p class="price">
+									{% if not product.special %}
+										<span class="new__price">{{ product.price }}</span>
+									{% else %}
+										<span class="new__price">{{ product.special }}</span>
+										<s class="price-old">{{ product.price }}</s>
+									{% endif %}
+								</p>
+							{% endif %}
+						</div>
+
+						<button class="button new__button" type="button" onclick="cart.add('{{ product.product_id }}');">
+							Comprar
+						</button>
+					</article>
+
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>

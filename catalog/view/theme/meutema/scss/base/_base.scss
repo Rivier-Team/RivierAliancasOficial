@@ -1,0 +1,113 @@
+/*=============== BASE ===============*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&family=Raleway:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+ 
+
+*{
+    padding: 0; margin: 0;
+    outline: none; border:none;
+    box-sizing: border-box;
+    text-decoration: none;
+    transition:all .3s cubic-bezier(.38,1.15,.7,1.12);
+    font-family: 'Raleway'; 
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body,
+button,
+input{
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+}
+
+*::selection{
+    background-color: var(--first-color);
+    color: var(--body-color);
+} 
+ 
+body::-webkit-scrollbar{
+    width: 0.9rem;
+}
+
+body::-webkit-scrollbar-track{
+    background: var(--body-color);
+}
+
+body::-webkit-scrollbar-thumb{
+    background-color: var(--main-color);    
+    border-bottom-left-radius: 1rem;
+
+    &:hover
+    { background: var(--first-color); }
+    
+    &:active
+    { background: var(--text-color); }
+}
+
+
+
+body{
+    margin: 0;
+    background-color: var(--body-color);
+    color: var(--text-color);
+    transition: .4s; /*For animation dark mode*/
+}
+h1, h2, h3,
+h4, h5, h6{
+    color: var(--title-color);
+    font-weight: var(--font-medium);  
+    font-family:'Poppins'; 
+}
+
+h1
+{
+    text-transform: capitalize;
+}
+
+
+
+ul
+{ list-style: none; }
+
+a, a:hover
+{ text-decoration: none; }
+
+a:hover
+{ color: var(--main-color); }
+
+img
+{ max-width: 100%; height: auto; }
+
+button
+{
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+p
+{
+    font-weight: 300;
+    text-transform: none;
+    line-height: 1.5rem;
+}   
+
+s
+{ text-decoration: line-through; }
+
+.section__title{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: var(--h2-font-size);
+    
+    & .underline {
+        @include underline(8%, 2px);
+        position: absolute;
+        top: -1rem;
+        left: 0; right: 0;
+        margin: 0 auto;
+    }
+}

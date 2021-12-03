@@ -1,0 +1,127 @@
+/*=============== VARIABLES CSS ===============*/
+:root{
+    --header-height: 3.5rem;
+
+    /*========== Colors ==========*/
+    /*Color mode HSL(hue, saturation, lightness)*/
+    --main-color: hsl(43, 74%, 49%);
+    --aux-color: hsl(340, 75%, 47%);
+    --first-color: hsl(43, 74%, 39%);
+    --second-color: hsl(224, 90%, 45%);
+    --third-color: hsl(126, 58%, 44%);
+    
+    --button-color: hsl(0, 0%, 17%);
+    --button-color-alt: hsl(0, 0%, 21%);
+
+    --text-color: hsl(0, 0%, 35%);
+    --text-color-light: hsl(0, 0%, 55%);
+    
+    --title-color: hsl(0, 0%, 15%);
+    --body-color: hsl(0, 0%, 98%);
+    --container-color: #fff;
+    --border-color: hsl(0, 0%, 94%);
+
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --dark-color: hsl(0, 0%, 12%);
+
+    /*========== Font and typography ==========*/
+    /*.5rem = 8px | 1rem = 16px ...*/
+    --body-font: 'Roboto', sans-serif;
+
+    --biggest-font-size: 2rem;
+    --h1-font-size: 1.5rem;
+    --h2-font-size: 1.25rem;
+    --h3-font-size: 1rem;
+    --normal-font-size: .938rem;
+    --small-font-size: .813rem;
+    --smaller-font-size: .75rem;
+
+    // Responsive typography
+    @media screen and (min-width: 968px){
+        --biggest-font-size: 2.5rem;
+        --h1-font-size: 2.25rem;
+        --h2-font-size: 1.5rem;
+        --h3-font-size: 1.25rem;
+        --normal-font-size: 1rem;
+        --small-font-size: .875rem;
+        --smaller-font-size: .813rem;
+    }
+
+    /*========== Font weight ==========*/
+    --font-medium: 500;
+    --font-bold: 700;
+
+    /*========== Margenes Bottom ==========*/
+    /*.5rem = 8px | 1rem = 16px ...*/
+    --mb-0-5: .5rem;
+    --mb-0-75: .75rem;
+    --mb-1: 1rem;
+    --mb-1-5: 1.5rem;
+    --mb-2: 2rem;
+    --mb-2-5: 2.5rem;
+    --mb-3: 3rem;
+
+    /*========== z index ==========*/
+    --z-tooltip: 10;
+    --z-fixed: 100;
+    --z-modal: 1000;
+}
+
+
+/*======= MIXINS E PLACEHOLDERS ========*/
+
+@mixin display_flex 
+($disp: flex, $just:center, $alig:center, $flex-dr:row, $flex-wp: nowrap)
+{
+    display: $disp;
+    align-items: $alig;
+    justify-content: $just;
+    flex-direction: $flex-dr;
+    flex-wrap: $flex-wp;
+}
+
+%dFlexFullCenter
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@mixin underline($width:100%, $height:5px, $marginBottom:0)
+{
+    width: $width; height: $height;
+    top: 5px;
+    display: flex;
+    justify-content: center;
+    background: var(--main-color);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: $marginBottom;
+}
+
+%underlineAnimation
+{
+    span
+    {
+        width: 15px;
+        height: 100%;
+        background: var(--body-color);
+        border-radius: 4px;
+        position: absolute;
+        top: 0;
+        left: 10px;
+        animation: moving 2s linear infinite;
+    }
+}
+
+@keyframes moving
+{
+    0%{
+        left: -20px;
+    }
+    100%{
+        left: 100%;
+    }
+}

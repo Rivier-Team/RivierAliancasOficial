@@ -1,0 +1,64 @@
+<section class="new section container" id="maisvendidos">
+	<h2 class="section__title">
+		<div class="underline">
+			<span></span>
+		</div>
+		{{heading_title}}
+	</h2>
+
+	<div class="new__container">
+		<div class="swiper new-swiper">
+			<div class="swiper-wrapper">
+				{% for product in products %}
+
+					<article class="swiper-slide container_produto">
+						<figure class="card_produto">
+							<div class="circle">
+								<div class="imgBx">
+									<img src="{{ product.thumb }}" loading="lazy" alt="{{ product.name }}" title="{{ product.name }}" class="featured__img"/>
+								</div>
+								<ul class="fav_view_compare">
+									<li style="--i:1">
+										<a href="#">
+
+											<ion-icon name="heart-outline" type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"></ion-icon>
+										</a>
+									</li>
+									<li style="--i:2">
+										<a href="{{ product.href }}">
+											<ion-icon name="eye-outline"></ion-icon>
+										</a>
+									</li>
+									<li style="--i:3">
+										<a href="#">
+											<ion-icon name="git-compare-outline" type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"></ion-icon>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<figcaption class="content">
+								<h3>{{ product.name }}</h3>
+								<p>
+									{% if product.price %}
+										{% if not product.special %}
+											<span>{{ product.price }}</span>
+										{% else %}
+											<s>{{ product.special }}</s>
+											<br>
+											{{ product.price }}
+										{% endif %}
+									{% endif %}
+								</p>
+							</figcaption>
+							<div type="button" class="btn_cart" onclick="cart.add('{{ product.product_id }}');">
+
+								<ion-icon name="cart-outline"></ion-icon>
+							</div>
+						</figure>
+					</article>
+				{% endfor %}
+
+			</div>
+		</div>
+	</div>
+</section>

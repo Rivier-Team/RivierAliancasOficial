@@ -1,0 +1,44 @@
+{% for product in products %}
+	<section class="home" id="home">
+		<div class="home__container container grid">
+
+			<div class="home__img-bg">
+				<img src="{{ product.thumb }}" loading="lazy" alt="{{ product.name }}" title="{{ product.name }}" class="home__img"/>
+			</div>
+
+			<div class="home__social">
+				<a href="https://www.facebook.com/" target="_blank" class="home__social-link">
+					Facebook
+				</a>
+				<a href="https://WhatsApp.com/" target="_blank" class="home__social-link">
+					WhatsApp
+				</a>
+				<a href="https://www.instagram.com/" target="_blank" class="home__social-link">
+					Instagram
+				</a>
+			</div>
+
+			<div class="home__data">
+
+				<h1 class="home__title">
+					<p>
+						{{ heading_title }}:<br><br>
+					</p>
+
+					{{ product.name }}
+				</h1>
+				<p class="home__description">
+					{{ product.description }}
+				</p>
+				<span class="home__price">{{ product.price }}</span>
+
+				<div class="home__btns">
+					<a href="{{ product.href }}" class="button button--gray button--small">OLHAR</a>
+					<button class="button home__button" onclick="cart.add('{{ product.product_id }}');">COMPRAR PRODUTO
+					</button>
+				</div>
+
+			</div>
+		</div>
+	</section>
+{% endfor %}
