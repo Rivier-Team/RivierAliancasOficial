@@ -100,16 +100,42 @@ div.required .control-label:before {
 }
 
 /* top */
+.bartop-curva {
+  position: relative;
+  background: var(--body-color);
+  width: 100%;
+  height: 2rem;
+  border-bottom-left-radius: 50px;
+}
+
+.barbottom-curva {
+  position: relative;
+  background: var(--body-color);
+  width: 100%;
+  height: 2rem;
+  border-top-right-radius: 50px;
+  top: -1.75rem;
+  left: .1rem;
+}
+
 #top {
-  background-color: #EEEEEE;
-  border-bottom: 1px solid #e2e2e2;
-  padding: 4px 0px 3px 0;
-  margin: 0 0 20px 0;
+  position: relative;
+  background-color: var(--aux-color);
+  margin: 24rem 0 0 0;
   min-height: 40px;
 }
 
 #top .container {
-  padding: 0 20px;
+  padding: 0 20px 1.5rem 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 #top #form-currency .currency-select,
@@ -128,8 +154,7 @@ div.required .control-label:before {
 }
 
 #top .btn-link, #top-links li, #top-links a {
-  color: #888;
-  text-shadow: 0 1px 0 #FFF;
+  color: #eee;
   text-decoration: none;
 }
 
@@ -8770,6 +8795,7 @@ footer .underline span {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body,
@@ -9002,6 +9028,8 @@ body.dark-theme {
   position: fixed;
   top: 0;
   left: 0;
+  padding-top: 1rem;
+  margin-top: 8rem;
   z-index: var(--z-fixed);
   -webkit-transition: .4s;
   transition: .4s;
@@ -9027,9 +9055,6 @@ body.dark-theme {
 }
 
 .nav__logo {
-  text-transform: uppercase;
-  font-weight: var(--font-bold);
-  letter-spacing: 1px;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -9040,8 +9065,10 @@ body.dark-theme {
           column-gap: .25rem;
 }
 
-.nav__logo-icon {
-  font-size: 1.25rem;
+.nav__logo.logoheader {
+  -webkit-transform: scale(0.28);
+          transform: scale(0.28);
+  margin-top: 0;
 }
 
 .nav__btns {
@@ -9120,6 +9147,7 @@ body.dark-theme {
   background-color: var(--body-color);
   -webkit-box-shadow: 0 1px 4px var(--shadow-color);
           box-shadow: 0 1px 4px var(--shadow-color);
+  margin-top: 0;
 }
 
 /* Active link */
@@ -10524,7 +10552,7 @@ button.close {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   font-size: 3em;
-  color: var(--aux-color);
+  color: var(--text-color);
   cursor: pointer;
   -webkit-transition: all 0.5s 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transition: all 0.5s 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
