@@ -31,9 +31,16 @@ navLink.forEach(n => n.addEventListener('click', linkAction))
 
 /*=============== CHANGE BACKGROUND HEADER ===============*/
 function scrollHeader() {
+    const logoHeader = document.querySelector('.nav__logo')
     const header = document.getElementById('header')
     // When the scroll is greater than 50 viewport height, add the scroll-header class to the header tag
-    if (this.scrollY >= 50) header.classList.add('scroll-header'); else header.classList.remove('scroll-header')
+    if (this.scrollY >= 50) {
+        header.classList.add('scroll-header');
+        logoHeader.classList.add('logoheader');
+
+    } else { header.classList.remove('scroll-header'); logoHeader.classList.remove('logoheader');}
+
+
 }
 window.addEventListener('scroll', scrollHeader)
 
@@ -177,24 +184,24 @@ const cancelBtn = document.querySelector(".cancel-icon");
 const searchInput = document.querySelector(".inputSearch");
 const searchData = document.querySelector(".search-data");
 searchBtn.onclick = () => {
-   searchBox.classList.add("active");
-   searchBtn.classList.add("active");
-   searchInput.classList.add("active");
-   cancelBtn.classList.add("active");
-   searchInput.focus();
-   if (searchInput.value != "") {
-      var values = searchInput.value;
-      searchData.classList.remove("active");
-      searchData.innerHTML = "Você digitou: " + "<span style='font-weight: 500;'>" + values + "</span> aperte 'Enter' para continuar";
-   } else {
-      searchData.textContent = "";
-   }
+    searchBox.classList.add("active");
+    searchBtn.classList.add("active");
+    searchInput.classList.add("active");
+    cancelBtn.classList.add("active");
+    searchInput.focus();
+    if (searchInput.value != "") {
+        var values = searchInput.value;
+        searchData.classList.remove("active");
+        searchData.innerHTML = "Você digitou: " + "<span style='font-weight: 500;'>" + values + "</span> aperte 'Enter' para continuar";
+    } else {
+        searchData.textContent = "";
+    }
 }
 cancelBtn.onclick = () => {
-   searchBox.classList.remove("active");
-   searchBtn.classList.remove("active");
-   searchInput.classList.remove("active");
-   cancelBtn.classList.remove("active");
-   searchData.classList.toggle("active");
-   searchInput.value = "";
+    searchBox.classList.remove("active");
+    searchBtn.classList.remove("active");
+    searchInput.classList.remove("active");
+    cancelBtn.classList.remove("active");
+    searchData.classList.toggle("active");
+    searchInput.value = "";
 }

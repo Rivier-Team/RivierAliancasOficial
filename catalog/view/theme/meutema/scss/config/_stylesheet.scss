@@ -78,15 +78,38 @@ div.required .control-label:before {
 	background-repeat: repeat-x;
 }
 /* top */
+.bartop-curva
+{
+	position: relative;
+	background: var(--body-color);
+	width: 100%;
+	height: 2rem;
+	border-bottom-left-radius: 50px;
+}
+
+.barbottom-curva
+{
+	position: relative;
+	background: var(--body-color);
+	width: 100%;
+	height: 2rem;
+	border-top-right-radius: 50px;
+	top: -1.75rem;
+	left: .1rem;
+}
+
+
 #top {
-	background-color: #EEEEEE;
-	border-bottom: 1px solid #e2e2e2;
-	padding: 4px 0px 3px 0;
-	margin: 0 0 20px 0;
+	position: relative;
+	background-color: var(--aux-color);
+	margin: 24rem 0 0 0;
 	min-height: 40px;
 }
 #top .container {
-	padding: 0 20px;
+	padding: 0 20px 1.5rem 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 #top #form-currency .currency-select,
 #top #form-language .language-select {
@@ -101,8 +124,7 @@ div.required .control-label:before {
 	background-repeat: repeat-x;
 }
 #top .btn-link, #top-links li, #top-links a {
-	color: #888;
-	text-shadow: 0 1px 0 #FFF;
+	color: #eee;
 	text-decoration: none;
 }
 #top .btn-link:hover, #top-links a:hover {

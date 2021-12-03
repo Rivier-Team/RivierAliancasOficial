@@ -5,6 +5,8 @@
     position: fixed;
     top: 0;
     left: 0;
+    padding-top: 1rem;
+    margin-top: 8rem;
     z-index: var(--z-fixed);
     transition: .4s; /*For animation dark mode*/ 
 }
@@ -23,16 +25,12 @@
         color: var(--title-color);
     }
     &__logo{
-        text-transform: uppercase;
-        font-weight: var(--font-bold);
-        letter-spacing: 1px;
         display: inline-flex;
         align-items: center;
         column-gap: .25rem;
-
-        &-icon{
-            font-size: 1.25rem;
-        }
+                
+        &.logoheader
+        { transform: scale(.28); margin-top: 0;}
     }
 
     &__btns{
@@ -93,6 +91,7 @@
 .scroll-header{
     background-color: var(--body-color);
     box-shadow: 0 1px 4px var(--shadow-color);
+    margin-top: 0;
 }
 
 /* Active link */

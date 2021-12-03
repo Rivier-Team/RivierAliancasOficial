@@ -54,90 +54,76 @@
 
 	<body>
 		{# class="header" id="header" #}
-		<header>
-			<nav id="top">
-				<div class="container">
-					<div id="top-links" class="nav pull-right">
-						<ul class="list-inline">
-							<li>
-								<a href="{{ contact }}">
-									<i class="fa fa-phone"></i>
-								</a>
-								<span class="hidden-xs hidden-sm hidden-md">{{ telephone }}</span>
-							</li>
-							<li class="dropdown">
-								<a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown">
-									<i class="fa fa-user"></i>
-									<span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span>
-									<span class="caret"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-right">
-									{% if logged %}
-										<li>
-											<a href="{{ account }}">{{ text_account }}</a>
-										</li>
-										<li>
-											<a href="{{ order }}">{{ text_order }}</a>
-										</li>
-										<li>
-											<a href="{{ transaction }}">{{ text_transaction }}</a>
-										</li>
-										<li>
-											<a href="{{ download }}">{{ text_download }}</a>
-										</li>
-										<li>
-											<a href="{{ logout }}">{{ text_logout }}</a>
-										</li>
-									{% else %}
-										<li>
-											<a href="{{ register }}">{{ text_register }}</a>
-										</li>
-										<li>
-											<a href="{{ login }}">{{ text_login }}</a>
-										</li>
-									{% endif %}
-								</ul>
-							</li>
-							<li>
-								<a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}">
-									<i class="fa fa-heart"></i>
-									<span class="hidden-xs hidden-sm hidden-md">{{ text_wishlist }}</span>
-								</a>
-							</li>
-							<li>
-								<a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}">
-									<i class="fa fa-shopping-cart"></i>
-									<span class="hidden-xs hidden-sm hidden-md">{{ text_shopping_cart }}</span>
-								</a>
-							</li>
-							<li>
-								<a href="{{ checkout }}" title="{{ text_checkout }}">
-									<i class="fa fa-share"></i>
-									<span class="hidden-xs hidden-sm hidden-md">{{ text_checkout }}</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
+		<nav id="top">
+			<div class="bartop-curva"></div>
 			<div class="container">
-				<div class="row">
-					<div class="col-sm-4">
-						<div id="logo">
-							{% if logo %}
-								<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" loading="lazy" alt="{{ name }}" class="img-responsive"/></a>
-							{% else %}
-								<h1>
-									<a href="{{ home }}">{{ name }}</a>
-								</h1>
-							{% endif %}
-						</div>
-					</div>
-					<div class="col-sm-3">{{ cart }}</div>
+
+				<div id="top-links" class="nav pull-right">
+					<ul class="list-inline">
+						<li>
+							<a href="{{ contact }}">
+								<i class="fa fa-phone"></i>
+							</a>
+							<span class="hidden-xs hidden-sm hidden-md">{{ telephone }}</span>
+						</li>
+						<li class="dropdown">
+							<a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-user"></i>
+								<span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span>
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								{% if logged %}
+									<li>
+										<a href="{{ account }}">{{ text_account }}</a>
+									</li>
+									<li>
+										<a href="{{ order }}">{{ text_order }}</a>
+									</li>
+									<li>
+										<a href="{{ transaction }}">{{ text_transaction }}</a>
+									</li>
+									<li>
+										<a href="{{ download }}">{{ text_download }}</a>
+									</li>
+									<li>
+										<a href="{{ logout }}">{{ text_logout }}</a>
+									</li>
+								{% else %}
+									<li>
+										<a href="{{ register }}">{{ text_register }}</a>
+									</li>
+									<li>
+										<a href="{{ login }}">{{ text_login }}</a>
+									</li>
+								{% endif %}
+							</ul>
+						</li>
+						<li>
+							<a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}">
+								<i class="fa fa-heart"></i>
+								<span class="hidden-xs hidden-sm hidden-md">{{ text_wishlist }}</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}">
+								<i class="fa fa-shopping-cart"></i>
+								<span class="hidden-xs hidden-sm hidden-md">{{ text_shopping_cart }}</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ checkout }}" title="{{ text_checkout }}">
+								<i class="fa fa-share"></i>
+								<span class="hidden-xs hidden-sm hidden-md">{{ text_checkout }}</span>
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
-
-			{# ==================== HEADER ==================== #}
+		</nav>
+			<div class="barbottom-curva"></div>
+		{# ==================== HEADER ==================== #}
+		<header class="header" id="header">
 			<nav class="nav container">
 				<div id="logo">
 
@@ -166,9 +152,6 @@
 						<li class="nav__item">
 							<a href="#maisvendidos" class="nav__link">Mais Vendidos</a>
 						</li>
-						<li class="nav__item">
-							<a href="#sobrenos" class="nav__link">Sobre a Rivier</a>
-						</li>
 					</ul>
 
 					<div class="nav__close" id="nav-close">
@@ -192,6 +175,7 @@
 					<div class="nav__shop" id="cart-shop">
 						<ion-icon name="bag-handle-outline"></ion-icon>
 					</div>
+					{{ cart }}
 
 					<div class="nav__toggle" id="nav-toggle">
 						<ion-icon name="grid-outline"></ion-icon>
