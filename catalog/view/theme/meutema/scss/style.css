@@ -115,7 +115,6 @@ div.required .control-label:before {
   height: 2rem;
   border-top-right-radius: 50px;
   top: -1.75rem;
-  left: .1rem;
 }
 
 #top {
@@ -9047,7 +9046,7 @@ body.dark-theme {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .nav__logo, .nav__toggle, .nav__shop, .nav__close {
