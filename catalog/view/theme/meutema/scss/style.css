@@ -10815,8 +10815,18 @@ button.close {
 }
 
 @media (max-width: 768px) {
-  .nav__logo img {
-    height: 3.5rem;
+  .nav__logo {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  .header {
+    margin-top: 4rem;
+  }
+  .scroll-header {
+    margin-top: 0rem;
+  }
+  #top {
+    margin-top: 11rem;
   }
   .container_produto {
     margin-left: 0rem;
