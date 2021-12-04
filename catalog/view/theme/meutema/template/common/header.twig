@@ -53,7 +53,23 @@
 	</head>
 
 	<body>
-		{# class="header" id="header" #}
+		<div class="loader">
+			<svg class="pl" viewbox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="pl-grad1" x1="1" y1="0.5" x2="0" y2="0.5">
+						<stop offset="0%" stop-color="hsl(340, 75%, 40%)"/>
+						<stop offset="100%" stop-color="hsl(43, 74%, 49%)"/>
+					</linearGradient>
+					<linearGradient id="pl-grad2" x1="0" y1="0" x2="0" y2="1">
+						<stop offset="0%" stop-color="hsl(340, 75%, 40%)"/>
+						<stop offset="100%" stop-color="hsl(43, 74%, 49%)"/>
+					</linearGradient>
+				</defs>
+				<circle class="pl__ring" cx="100" cy="100" r="82" fill="none" stroke="url(#pl-grad1)" stroke-width="36" stroke-dasharray="0 257 1 257" stroke-dashoffset="0.01" stroke-linecap="round" transform="rotate(-90,100,100)"/>
+				<line class="pl__ball" stroke="url(#pl-grad2)" x1="100" y1="18" x2="100.01" y2="182" stroke-width="36" stroke-dasharray="1 165" stroke-linecap="round"/>
+			</svg>
+		</div>
+
 		<nav id="top">
 			<div class="bartop-curva"></div>
 			<div class="container">
@@ -62,13 +78,15 @@
 					<ul class="list-inline">
 						<li>
 							<a href="{{ contact }}">
-								<i class="fa fa-phone"></i>
+								<ion-icon name="call"></ion-icon>
 							</a>
-							<span class="hidden-xs hidden-sm hidden-md">{{ telephone }}</span>
+							<span class="hidden-xs hidden-sm hidden-md">
+								<a href="tel: {{ telephone }}">{{ telephone }}</a>
+							</span>
 						</li>
 						<li class="dropdown">
 							<a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-user"></i>
+								<ion-icon name="person"></ion-icon>
 								<span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span>
 								<span class="caret"></span>
 							</a>
@@ -101,19 +119,19 @@
 						</li>
 						<li>
 							<a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}">
-								<i class="fa fa-heart"></i>
+								<ion-icon name="heart"></ion-icon>
 								<span class="hidden-xs hidden-sm hidden-md">{{ text_wishlist }}</span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}">
-								<i class="fa fa-shopping-cart"></i>
+								<ion-icon name="cart"></ion-icon>
 								<span class="hidden-xs hidden-sm hidden-md">{{ text_shopping_cart }}</span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ checkout }}" title="{{ text_checkout }}">
-								<i class="fa fa-share"></i>
+								<ion-icon name="arrow-redo"></ion-icon>
 								<span class="hidden-xs hidden-sm hidden-md">{{ text_checkout }}</span>
 							</a>
 						</li>
@@ -121,7 +139,7 @@
 				</div>
 			</div>
 		</nav>
-			<div class="barbottom-curva"></div>
+		<div class="barbottom-curva"></div>
 		{# ==================== HEADER ==================== #}
 		<header class="header" id="header">
 			<nav class="nav container">
@@ -144,10 +162,10 @@
 							<a href="#home" class="nav__link active-link">Home</a>
 						</li>
 						<li class="nav__item">
-							<a href="#promocoes" class="nav__link">Promocões</a>
+							<a href="#novidades" class="nav__link">Novidades</a>
 						</li>
 						<li class="nav__item">
-							<a href="#novidades" class="nav__link">Novidades</a>
+							<a href="#promocoes" class="nav__link">Promocões</a>
 						</li>
 						<li class="nav__item">
 							<a href="#maisvendidos" class="nav__link">Mais Vendidos</a>

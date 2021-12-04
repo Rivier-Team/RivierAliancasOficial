@@ -28,9 +28,6 @@
         display: inline-flex;
         align-items: center;
         column-gap: .25rem;
-                
-        &.logoheader
-        { transform: scale(.28); margin-top: 0;}
     }
 
     &__btns{
@@ -98,3 +95,6 @@
 .active-link{
     color: var(--main-color);
 }
+
+#logo.logoheader
+{ transform: scale(.28); margin-top: -.3rem;}

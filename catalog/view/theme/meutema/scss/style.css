@@ -1,5 +1,119 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&family=Raleway:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+.loader {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  background-color: var(--body-color);
+  z-index: 10000000000;
+}
+
+.loader .pl {
+  display: block;
+  width: 6.25em;
+  height: 6.25em;
+}
+
+.loader .pl__ring, .loader .pl__ball {
+  -webkit-animation: ring 2s ease-out infinite;
+          animation: ring 2s ease-out infinite;
+}
+
+.loader .pl__ball {
+  -webkit-animation-name: ball;
+          animation-name: ball;
+}
+
+/* Animation */
+@-webkit-keyframes ring {
+  from {
+    stroke-dasharray: 0 257 0 0 1 0 0 258;
+  }
+  25% {
+    stroke-dasharray: 0 0 0 0 257 0 258 0;
+  }
+  50%, to {
+    stroke-dasharray: 0 0 0 0 0 515 0 0;
+  }
+}
+@keyframes ring {
+  from {
+    stroke-dasharray: 0 257 0 0 1 0 0 258;
+  }
+  25% {
+    stroke-dasharray: 0 0 0 0 257 0 258 0;
+  }
+  50%, to {
+    stroke-dasharray: 0 0 0 0 0 515 0 0;
+  }
+}
+
+@-webkit-keyframes ball {
+  from, 50% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: 1;
+  }
+  64% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: -109;
+  }
+  78% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: -145;
+  }
+  92% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: -157;
+  }
+  57%, 71%, 85%, 99%, to {
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+    stroke-dashoffset: -163;
+  }
+}
+
+@keyframes ball {
+  from, 50% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: 1;
+  }
+  64% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: -109;
+  }
+  78% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: -145;
+  }
+  92% {
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    stroke-dashoffset: -157;
+  }
+  57%, 71%, 85%, 99%, to {
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+    stroke-dashoffset: -163;
+  }
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -9065,12 +9179,6 @@ body.dark-theme {
           column-gap: .25rem;
 }
 
-.nav__logo.logoheader {
-  -webkit-transform: scale(0.28);
-          transform: scale(0.28);
-  margin-top: 0;
-}
-
 .nav__btns {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -9155,6 +9263,12 @@ body.dark-theme {
   color: var(--main-color);
 }
 
+#logo.logoheader {
+  -webkit-transform: scale(0.28);
+          transform: scale(0.28);
+  margin-top: -.3rem;
+}
+
 /*=============== HOME ===============*/
 .home__container {
   position: relative;
@@ -9186,8 +9300,7 @@ body.dark-theme {
       -ms-flex-align: end;
           align-items: flex-end;
   justify-self: flex-end;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
+  border-radius: 50px;
   -webkit-transform: translateX(1.5rem);
           transform: translateX(1.5rem);
 }
