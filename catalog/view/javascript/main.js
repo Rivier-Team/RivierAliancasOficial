@@ -31,14 +31,14 @@ navLink.forEach(n => n.addEventListener('click', linkAction))
 
 /*=============== CHANGE BACKGROUND HEADER ===============*/
 function scrollHeader() {
-    const logoHeader = document.querySelector('.nav__logo')
+    const logoHeader = document.getElementById('logo')
     const header = document.getElementById('header')
     // When the scroll is greater than 50 viewport height, add the scroll-header class to the header tag
     if (this.scrollY >= 50) {
         header.classList.add('scroll-header');
         logoHeader.classList.add('logoheader');
 
-    } else { header.classList.remove('scroll-header'); logoHeader.classList.remove('logoheader');}
+    } else { header.classList.remove('scroll-header'); logoHeader.classList.remove('logoheader'); }
 
 
 }
