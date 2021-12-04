@@ -205,3 +205,11 @@ cancelBtn.onclick = () => {
     searchData.classList.toggle("active");
     searchInput.value = "";
 }
+
+
+/*=============== PRELOADER ===============*/
+setTimeout(function () {
+    $("html").addClass("loader");
+    $("html").removeClass("loader");
+    $(".loader").css({ display: "none" });
+}, 3500);
