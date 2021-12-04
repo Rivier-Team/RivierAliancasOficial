@@ -126,6 +126,7 @@ footer .social-icons
 {
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 footer .social-icons .fa
@@ -138,7 +139,7 @@ footer .social-icons .fa
     line-height: 40px;
     background: #fff; 
     color: var(--aux-color );
-    margin: 15px 0 0 15px;
+    margin: 0 1.5rem;
     cursor: pointer; 
 }
 footer .social-icons .fa:hover

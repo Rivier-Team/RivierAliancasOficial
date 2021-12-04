@@ -115,6 +115,7 @@ div.required .control-label:before {
   height: 2rem;
   border-top-right-radius: 50px;
   top: -1.75rem;
+  left: .1rem;
 }
 
 #top {
@@ -8693,7 +8694,7 @@ button.close {
   /*========== Colors ==========*/
   /*Color mode HSL(hue, saturation, lightness)*/
   --main-color: hsl(43, 74%, 49%);
-  --aux-color: hsl(340, 75%, 47%);
+  --aux-color: hsl(340, 75%, 40%);
   --first-color: hsl(43, 74%, 39%);
   --second-color: hsl(224, 90%, 45%);
   --third-color: hsl(126, 58%, 44%);
@@ -9029,7 +9030,7 @@ body.dark-theme {
   left: 0;
   padding-top: 1rem;
   margin-top: 8rem;
-  z-index: var(--z-fixed);
+  z-index: 10000;
   -webkit-transition: .4s;
   transition: .4s;
   /*For animation dark mode*/
@@ -9046,7 +9047,7 @@ body.dark-theme {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  z-index: 10;
+  z-index: 1000;
 }
 
 .nav__logo, .nav__toggle, .nav__shop, .nav__close {
@@ -9163,13 +9164,18 @@ body.dark-theme {
 .home__img {
   width: 240px;
   border-radius: 8px;
+  -webkit-transition: .5s;
+  transition: .5s;
+  margin-left: -2rem;
+  -webkit-animation: flutuaImg 2s infinite ease-in-out;
+          animation: flutuaImg 2s infinite ease-in-out;
 }
 
 .home__img-bg {
-  background-color: var(--main-color);
+  background-color: var(--aux-color);
   width: 258px;
   height: 430px;
-  padding-bottom: 2rem;
+  padding-bottom: 7rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -9184,6 +9190,26 @@ body.dark-theme {
   border-bottom-left-radius: 8px;
   -webkit-transform: translateX(1.5rem);
           transform: translateX(1.5rem);
+}
+
+.home__img-bg::before {
+  content: '';
+  position: absolute;
+  bottom: 4rem;
+  width: 80%;
+  height: 120px;
+  background: radial-gradient(rgba(0, 0, 0, 0.45), transparent, transparent);
+  border-radius: 50%;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  -webkit-animation: sombraImg 2s infinite ease-in-out;
+          animation: sombraImg 2s infinite ease-in-out;
+}
+
+.home__img-bg:hover::before {
+  opacity: 0.8;
+  -webkit-transform: scale(0.7);
+          transform: scale(0.7);
 }
 
 .home__social {
@@ -9246,6 +9272,54 @@ body.dark-theme {
   -webkit-box-shadow: 0 12px 24px var(--shadow-color);
           box-shadow: 0 12px 24px var(--shadow-color);
   border-radius: 4px;
+}
+
+@-webkit-keyframes flutuaImg {
+  0%, 100% {
+    -webkit-transform: translateY(-2.5rem);
+            transform: translateY(-2.5rem);
+  }
+  50% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@keyframes flutuaImg {
+  0%, 100% {
+    -webkit-transform: translateY(-2.5rem);
+            transform: translateY(-2.5rem);
+  }
+  50% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes sombraImg {
+  0%, 100% {
+    opacity: .8;
+    -webkit-transform: scale(0.7);
+            transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@keyframes sombraImg {
+  0%, 100% {
+    opacity: .8;
+    -webkit-transform: scale(0.7);
+            transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
 }
 
 /*=============== BUTTONS ===============*/
@@ -9830,6 +9904,7 @@ footer .social-icons {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  width: 100%;
 }
 
 footer .social-icons .fa {
@@ -9842,7 +9917,7 @@ footer .social-icons .fa {
   line-height: 40px;
   background: #fff;
   color: var(--aux-color);
-  margin: 15px 0 0 15px;
+  margin: 0 1.5rem;
   cursor: pointer;
 }
 

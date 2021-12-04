@@ -7,7 +7,7 @@
     left: 0;
     padding-top: 1rem;
     margin-top: 8rem;
-    z-index: var(--z-fixed);
+    z-index: 10000;
     transition: .4s; /*For animation dark mode*/ 
 }
 
@@ -16,7 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 10;
+    z-index: 1000;
 
     &__logo,
     &__toggle,
