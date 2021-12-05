@@ -72,8 +72,8 @@ div.required .control-label:before {
 /* Gradent to all drop down menus */
 .dropdown-menu li > a:hover {
 	text-decoration: none;
-	color: #ffffff;
-	background-color: #229ac8;
+	color: #000;
+	background-color: #f000;
 	background-image: linear-gradient(to bottom, #23a1d1, #1f90bb);
 	background-repeat: repeat-x;
 }
@@ -95,7 +95,6 @@ div.required .control-label:before {
 	height: 2rem;
 	border-top-right-radius: 50px;
 	top: -1.75rem;
-	left: .1rem;
 }
 
 
@@ -128,7 +127,7 @@ div.required .control-label:before {
 	text-decoration: none;
 }
 #top .btn-link:hover, #top-links a:hover {
-	color: #444;
+	color: var(--main-color);
 }
 #top-links .dropdown-menu a {
 	text-shadow: none;
