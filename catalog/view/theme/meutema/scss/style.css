@@ -229,6 +229,7 @@ div.required .control-label:before {
   height: 2rem;
   border-top-right-radius: 50px;
   top: -1.75rem;
+  left: .1rem;
 }
 
 #top {
@@ -386,10 +387,10 @@ div.required .control-label:before {
 /* menu */
 #menu {
   background-color: #229ac8;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#23a1d1), to(#1f90bb));
-  background-image: linear-gradient(to bottom, #23a1d1, #1f90bb);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(var(--first-color)));
+  background-image: linear-gradient(to bottom, #000, var(--first-color));
   background-repeat: repeat-x;
-  border-color: #1f90bb #1f90bb #145e7a;
+  border-color: var(--main-color) var(--main-color) var(--main-color);
   min-height: 40px;
 }
 
