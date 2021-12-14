@@ -16,7 +16,7 @@ LINKS:
 
 Trabalho de Conclusão de Curso (TCC) diretamente da ETEC Jardim Ângela, criado a partir dos fundamentos e aprendizagens concedidos no curso de desenvolvimento de sistemas.
 
-### Pré-visualização da página web RivierAlianças:
+### Pré-visualização da página web Rivier Alianças:
 ![Pré-visualização da página web da RivierAlianças](https://rivieraliancas.com.br/image/catalog/tela-desktop-cortado-redimensionado.png)
 
 
