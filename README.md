@@ -1,4 +1,4 @@
-# __Rivier Alianças__ - Loja Virtual de Jóias
+# RIVIER ALIANÇAS - Loja Virtual de Jóias
 
 DESENVOLVIDO POR:
 
